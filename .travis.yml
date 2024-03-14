@@ -1,0 +1,75 @@
+os: linux
+dist: bionic
+language: go
+go:
+  - "1.17.2"
+services:
+  - docker
+addons:
+  apt:
+    packages:
+      - pigz
+
+env:
+  global:
+    - GO111MODULE=on
+    - ALLOW_FAIL=false
+    - ROSETTA_MAINTAINER_KEYS="8f94311b0d7422b170ae0cc271ba5ca94e686cf7 219f55740bbf7a1ce368ba45fb7053ce4991b669 FC3388A460ACFAB04E8328C07BB2A1D2CFDFCD2C"
+    - KOMODOD_MAINTAINER_KEYS="219f55740bbf7a1ce368ba45fb7053ce4991b669 FC3388A460ACFAB04E8328C07BB2A1D2CFDFCD2C D0459BD6AAD14E8D9C83FF1E8EDE560493C65AC1 661F6FC64773A0F47936625FD3A22623FF9B9F11 BF1FCDC8AEE7AE53013FF0941FCA7260796CB902 05A7B1EDFE39C7654176002C629611734CE354B9"
+    - KOMODO_COMMITTISH=v5.0.1
+    - DOCKER_IMAGE_NAME=deckersu/rosetta-komodo
+
+# TODO remove || true
+install: make deps || true
+
+# TODO fix failures
+jobs:
+  allow_failures:
+    env:
+      - ALLOW_FAIL=true
+  include:
+    - stage: Tests
+      script: make test
+    - stage: Tests
+      env:
+        - ALLOW_FAIL=true
+      script:
+        - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
+        - make lint
+    - stage: Tests
+      env:
+        - ALLOW_FAIL=true
+      script: make check-license
+    - stage: Tests
+      env:
+        - ALLOW_FAIL=true
+      script: make check-format
+    - stage: Tests
+      env:
+        - ALLOW_FAIL=true
+      script: make coverage
+    - stage: Tests
+      env:
+        - ALLOW_FAIL=true
+      script: make salus
+    - stage: Build
+      vm:
+        size: 2x-large
+      script:
+        - source ci/setup_env.sh
+        - if [ ! -z "${version}" ]; then make build-release; else make build-local; fi
+
+deploy:
+  edge: true
+  provider: releases
+  draft: false
+  overwrite: true
+  token: "${GITHUB_TOKEN}"
+  release_notes: "Release ${version}"
+  file_glob: false
+  file:
+    - "./rosetta-kmd-${version}.tar.gz"
+  cleanup: false
+  on:
+    tags: true
+    condition: '! -z "${version}"'

@@ -1,0 +1,8 @@
+rosetta-bitcoin
+komodo-data
+cli-data
+Dockerfile*
+*.sh
+!entrypoint.sh
+*.md
+ci/
