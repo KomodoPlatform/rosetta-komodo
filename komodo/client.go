@@ -224,10 +224,10 @@ func (b *Client) GetRawBlock(
 		coins, blockTxHashes = addCoins(txIndex, blockTxHashes, tx.Hash, tx.Inputs, b, coins)
 	}
 
-	blockCertTxHashes := []string{}
-	for certTxIndex, certTx := range block.Certs {
-		coins, blockCertTxHashes = addCoins(certTxIndex, blockCertTxHashes, certTx.Hash, certTx.Inputs, b, coins)
-	}
+	// blockCertTxHashes := []string{}
+	// for certTxIndex, certTx := range block.Certs {
+	// 	coins, blockCertTxHashes = addCoins(certTxIndex, blockCertTxHashes, certTx.Hash, certTx.Inputs, b, coins)
+	// }
 
 	return block, coins, nil
 }
@@ -503,7 +503,7 @@ func (b *Client) parseTransactions(
 	if block == nil {
 		return nil, errors.New("error parsing nil block")
 	}
-	txs := make([]*types.Transaction, len(block.Txs)+len(block.Certs))
+	txs := make([]*types.Transaction, len(block.Txs)) // +len(block.Certs)
 	for index, transaction := range block.Txs {
 		txOps, err := b.parseTxOperations(transaction.Inputs, transaction.Outputs, transaction.Hash, index, coins, false)
 		if err != nil {
@@ -528,65 +528,65 @@ func (b *Client) parseTransactions(
 		coins = addCoinsFromSameBlock(tx.Operations, coins)
 	}
 
-	for index, certificate := range block.Certs {
-		txIndex := len(block.Txs) + index
-		certTxOps, err := b.parseTxOperations(certificate.Inputs, certificate.Outputs, certificate.Hash, txIndex, coins, true)
-		if err != nil {
-			return nil, fmt.Errorf("%w: error parsing certificate transaction operations", err)
-		}
+	// for index, certificate := range block.Certs {
+	// 	txIndex := len(block.Txs) + index
+	// 	certTxOps, err := b.parseTxOperations(certificate.Inputs, certificate.Outputs, certificate.Hash, txIndex, coins, true)
+	// 	if err != nil {
+	// 		return nil, fmt.Errorf("%w: error parsing certificate transaction operations", err)
+	// 	}
 
-		tx := &types.Transaction{
-			TransactionIdentifier: &types.TransactionIdentifier{
-				Hash: certificate.Hash,
-			},
-			Operations: certTxOps,
-		}
+	// 	tx := &types.Transaction{
+	// 		TransactionIdentifier: &types.TransactionIdentifier{
+	// 			Hash: certificate.Hash,
+	// 		},
+	// 		Operations: certTxOps,
+	// 	}
 
-		txs[txIndex] = tx
+	// 	txs[txIndex] = tx
 
-		coins = addCoinsFromSameBlock(tx.Operations, coins)
-	}
+	// 	coins = addCoinsFromSameBlock(tx.Operations, coins)
+	// }
 
-	for _, matureCertificate := range block.MaturedCerts {
-		// For matured certificates, we only parse outputs that are backward transfers
-		backwardTransferOutputs := []*Output{}
+	// for _, matureCertificate := range block.MaturedCerts {
+	// 	// For matured certificates, we only parse outputs that are backward transfers
+	// 	backwardTransferOutputs := []*Output{}
 
-		for i := range matureCertificate.Outputs {
+	// 	for i := range matureCertificate.Outputs {
 
-			if matureCertificate.Outputs[i].BackwardTransfer {
-				backwardTransferOutputs = append(backwardTransferOutputs, matureCertificate.Outputs[i])
-			}
-		}
-		// we put -1 for index because this param is only used to determine that this "tx" is not a coinbase tx
-		matureCertTxOps, err := b.parseTxOperations([]*Input{}, backwardTransferOutputs, matureCertificate.Hash, -1, coins, false)
-		if err != nil {
-			return nil, fmt.Errorf("%w: error parsing mature certificate transaction operations", err)
-		}
+	// 		if matureCertificate.Outputs[i].BackwardTransfer {
+	// 			backwardTransferOutputs = append(backwardTransferOutputs, matureCertificate.Outputs[i])
+	// 		}
+	// 	}
+	// 	// we put -1 for index because this param is only used to determine that this "tx" is not a coinbase tx
+	// 	matureCertTxOps, err := b.parseTxOperations([]*Input{}, backwardTransferOutputs, matureCertificate.Hash, -1, coins, false)
+	// 	if err != nil {
+	// 		return nil, fmt.Errorf("%w: error parsing mature certificate transaction operations", err)
+	// 	}
 
-		certAndMatureCertTogether := false
-		for _, tx := range txs {
-			if tx.TransactionIdentifier.Hash == matureCertificate.Hash {
-				for _, matureCertTxOp := range matureCertTxOps {
-					matureCertTxOp.OperationIdentifier.Index += int64(len(tx.Operations))
-				}
-				tx.Operations = append(tx.Operations, matureCertTxOps...)
-				certAndMatureCertTogether = true
-			}
-		}
+	// 	certAndMatureCertTogether := false
+	// 	for _, tx := range txs {
+	// 		if tx.TransactionIdentifier.Hash == matureCertificate.Hash {
+	// 			for _, matureCertTxOp := range matureCertTxOps {
+	// 				matureCertTxOp.OperationIdentifier.Index += int64(len(tx.Operations))
+	// 			}
+	// 			tx.Operations = append(tx.Operations, matureCertTxOps...)
+	// 			certAndMatureCertTogether = true
+	// 		}
+	// 	}
 
-		tx := &types.Transaction{
-			TransactionIdentifier: &types.TransactionIdentifier{
-				Hash: matureCertificate.Hash,
-			},
-			Operations: matureCertTxOps,
-		}
+	// 	tx := &types.Transaction{
+	// 		TransactionIdentifier: &types.TransactionIdentifier{
+	// 			Hash: matureCertificate.Hash,
+	// 		},
+	// 		Operations: matureCertTxOps,
+	// 	}
 
-		if !certAndMatureCertTogether {
-			txs = append(txs, tx)
-		}
-		//this shouldn't be necessary but just in case...
-		coins = addCoinsFromSameBlock(tx.Operations, coins)
-	}
+	// 	if !certAndMatureCertTogether {
+	// 		txs = append(txs, tx)
+	// 	}
+	// 	//this shouldn't be necessary but just in case...
+	// 	coins = addCoinsFromSameBlock(tx.Operations, coins)
+	// }
 
 	return txs, nil
 }

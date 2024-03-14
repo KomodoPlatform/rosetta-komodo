@@ -197,9 +197,9 @@ type Block struct {
 	Bits              string  `json:"bits"`
 	Difficulty        float64 `json:"difficulty"`
 
-	Txs          []*Transaction `json:"tx"`
-	Certs        []*Certificate `json:"cert"`
-	MaturedCerts []*Certificate `json:"matureCertificate"`
+	Txs []*Transaction `json:"tx"`
+	// Certs        []*Certificate `json:"cert"`
+	// MaturedCerts []*Certificate `json:"matureCertificate"`
 }
 
 // Metadata returns the metadata for a block.
@@ -241,27 +241,27 @@ type Transaction struct {
 	Joinsplits []*Joinsplit `json:"vjoinsplit"`
 }
 
-type Certificate struct {
-	Hash       string       `json:"txid"`
-	Version    int32        `json:"version"`
-	Inputs     []*Input     `json:"vin"`
-	Cert       *Cert        `json:"cert"`
-	Outputs    []*Output    `json:"vout"`
-	Joinsplits []*Joinsplit `json:"vjoinsplit"`
-}
+// type Certificate struct {
+// 	Hash       string       `json:"txid"`
+// 	Version    int32        `json:"version"`
+// 	Inputs     []*Input     `json:"vin"`
+// 	Cert       *Cert        `json:"cert"`
+// 	Outputs    []*Output    `json:"vout"`
+// 	Joinsplits []*Joinsplit `json:"vjoinsplit"`
+// }
 
-type Cert struct {
-	Scid                          string   `json:"scid"`
-	EpochNumber                   int64    `json:"epochNumber"`
-	Quality                       int64    `json:"quality"`
-	EndEpochCumScTxCommTreeRoot   string   `json:"endEpochCumScTxCommTreeRoot"`
-	ScProof                       string   `json:"scProof"`
-	VFieldElementCertificateField []string `json:"vFieldElementCertificateField"`
-	VBitVectorCertificateField    []string `json:"vBitVectorCertificateField"`
-	FtScFee                       float64  `json:"ftScFee"`
-	MbtrScFee                     float64  `json:"mbtrScFee"`
-	TotalAmount                   float64  `json:"totalAmount"`
-}
+// type Cert struct {
+// 	Scid                          string   `json:"scid"`
+// 	EpochNumber                   int64    `json:"epochNumber"`
+// 	Quality                       int64    `json:"quality"`
+// 	EndEpochCumScTxCommTreeRoot   string   `json:"endEpochCumScTxCommTreeRoot"`
+// 	ScProof                       string   `json:"scProof"`
+// 	VFieldElementCertificateField []string `json:"vFieldElementCertificateField"`
+// 	VBitVectorCertificateField    []string `json:"vBitVectorCertificateField"`
+// 	FtScFee                       float64  `json:"ftScFee"`
+// 	MbtrScFee                     float64  `json:"mbtrScFee"`
+// 	TotalAmount                   float64  `json:"totalAmount"`
+// }
 
 // Joinsplit is a raw Joinsplit transaction representation.
 type Joinsplit struct {
