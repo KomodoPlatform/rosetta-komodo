@@ -33,7 +33,7 @@ func TstAppDataDir(goos, appName string, roaming bool) string {
 // TstAddressPubKeyHash makes an AddressPubKeyHash, setting the
 // unexported fields with the parameters hash and netID.
 func TstAddressPubKeyHash(hash [ripemd160.Size]byte,
-	netID uint16) *AddressPubKeyHash {
+	netID byte) *AddressPubKeyHash {
 
 	return &AddressPubKeyHash{
 		hash:  hash,
@@ -44,7 +44,7 @@ func TstAddressPubKeyHash(hash [ripemd160.Size]byte,
 // TstAddressScriptHash makes an AddressScriptHash, setting the
 // unexported fields with the parameters hash and netID.
 func TstAddressScriptHash(hash [ripemd160.Size]byte,
-	netID uint16) *AddressScriptHash {
+	netID byte) *AddressScriptHash {
 
 	return &AddressScriptHash{
 		hash:  hash,
@@ -55,7 +55,7 @@ func TstAddressScriptHash(hash [ripemd160.Size]byte,
 // TstAddressPubKey makes an AddressPubKey, setting the unexported fields with
 // the parameters.
 func TstAddressPubKey(serializedPubKey []byte, pubKeyFormat PubKeyFormat,
-	netID uint16) *AddressPubKey {
+	netID byte) *AddressPubKey {
 
 	pubKey, _ := btcec.ParsePubKey(serializedPubKey, btcec.S256())
 	return &AddressPubKey{
@@ -69,5 +69,5 @@ func TstAddressPubKey(serializedPubKey []byte, pubKeyFormat PubKeyFormat,
 // P2PKH and P2SH bitcoin addresses.
 func TstAddressSAddr(addr string) []byte {
 	decoded := base58.Decode(addr)
-	return decoded[2 : 2+ripemd160.Size]
+	return decoded[1 : 1+ripemd160.Size]
 }

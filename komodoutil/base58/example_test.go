@@ -40,7 +40,7 @@ func ExampleEncode() {
 // This example demonstrates how to decode Base58Check encoded data.
 func ExampleCheckDecode() {
 	// Decode an example Base58Check encoded data.
-	encoded := "zncPA6vFaz5wMyHeuQUcVfJk8FS4gGYQXRb"
+	encoded := "RLaSC1WFwLEKSBka2LN7rX3nrCcbX2vbn4"
 	decoded, version, err := base58.CheckDecode(encoded)
 	if err != nil {
 		fmt.Println(err)
@@ -53,7 +53,7 @@ func ExampleCheckDecode() {
 
 	// Output:
 	// Decoded data: 7bec3c2b8f04ddbda3c238e3eae6fbcffa757a25
-	// Version Byte: 8329
+	// Version Byte: 60
 }
 
 // This example demonstrates how to encode data using the Base58Check encoding
@@ -63,11 +63,11 @@ func ExampleCheckEncode() {
 	data := []byte{
 		0x7b, 0xec, 0x3c, 0x2b, 0x8f, 0x04, 0xdd, 0xbd, 0xa3, 0xc2, 0x38, 0xe3, 0xea, 0xe6, 0xfb, 0xcf, 0xfa, 0x75, 0x7a, 0x25,
 	}
-	encoded := base58.CheckEncode(data, 8329)
+	encoded := base58.CheckEncode(data, 60)
 
 	// Show the encoded data.
 	fmt.Println("Encoded Data:", encoded)
 
 	// Output:
-	// Encoded Data: zncPA6vFaz5wMyHeuQUcVfJk8FS4gGYQXRb
+	// Encoded Data: RLaSC1WFwLEKSBka2LN7rX3nrCcbX2vbn4
 }

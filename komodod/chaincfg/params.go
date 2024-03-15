@@ -153,9 +153,9 @@ type Params struct {
 	MinerConfirmationWindow       uint32 // [!!! NOT USED]
 
 	// Address encoding magics
-	PubKeyHashAddrID uint16 // First 2 bytes of a P2PKH address
-	ScriptHashAddrID uint16 // First 2 bytes of a P2SH address
-	PrivateKeyID     byte   // First byte of a WIF private key
+	PubKeyHashAddrID byte // First byte of a P2PKH address
+	ScriptHashAddrID byte // First byte of a P2SH address
+	PrivateKeyID     byte // First byte of a WIF private key
 
 	// BIP32 hierarchical deterministic extended key magics
 	HDPrivateKeyID [4]byte
@@ -185,46 +185,6 @@ var MainNetParams = Params{
 	// Checkpoints ordered from oldest to newest.
 	Checkpoints: []Checkpoint{
 		{0, newHashFromStr("027e3758c3a65b12aa1046462b486d0a63bfa1beae327897f56c5cfb7daaae71")},
-	},
-
-	// Consensus rule change deployments.
-	//
-	// The miner confirmation window is defined as:
-	//   target proof of work timespan / target proof of work spacing
-	RuleChangeActivationThreshold: 1916, // 95% of MinerConfirmationWindow
-	MinerConfirmationWindow:       2016, //
-
-	// Address encoding magics
-	PubKeyHashAddrID: 0x2089, // starts with 1
-	ScriptHashAddrID: 0x2096, // starts with 3
-	PrivateKeyID:     0x80,   // starts with 5 (uncompressed) or K (compressed)
-
-	// BIP32 hierarchical deterministic extended key magics
-	HDPrivateKeyID: [4]byte{0x04, 0x88, 0xad, 0xe4}, // starts with xprv
-	HDPublicKeyID:  [4]byte{0x04, 0x88, 0xb2, 0x1e}, // starts with xpub
-}
-
-// RegressionNetParams defines the network parameters for the regression test
-// Bitcoin network.  Not to be confused with the test Bitcoin network (version
-// 3), this network is sometimes simply called "testnet".
-var RegressionNetParams = Params{
-	Name:        "test",
-	Net:         wire.TestNet,
-	DefaultPort: "19033",
-	DNSSeeds: []DNSSeed{
-		{"dnsseed.testnet.komodo.global", false},
-	},
-	// Chain parameters
-	GenesisBlock:     &testNetGenesisBlock,
-	GenesisHash:      &testnetGenesisHash,
-	CoinbaseMaturity: 100,
-	BIP0034Height:    0,
-	BIP0065Height:    0, // Used by regression tests
-	BIP0066Height:    0, // Used by regression tests
-
-	// Checkpoints ordered from oldest to newest.
-	Checkpoints: []Checkpoint{
-		{0, newHashFromStr("03e1c4bb705c871bf9bfda3e74b7f8f86bff267993c215a89d5795e3708e5e1f")},
 		{50000, newHashFromStr("00076e16d3fa5194da559c17cf9cf285e21d1f13154ae4f7c7b87919549345aa")},
 		{100000, newHashFromStr("0f02eb1f3a4b89df9909fec81a4bd7d023e32e24e1f5262d9fc2cc36a715be6f")},
 		{150000, newHashFromStr("0a817f15b9da636f453a7a01835cfc534ed1a55ce7f08c566471d167678bedce")},
@@ -299,6 +259,46 @@ var RegressionNetParams = Params{
 		{3600000, newHashFromStr("09a6622ca9c61abcd2e20c5bedfd3c975803ae8c1fb913f61be9ba3e82916791")},
 		{3648244, newHashFromStr("002fdc2c0a087b8b4075268c8caf97571ac9b0908aa6dde37077ad179dc614ee")},
 	},
+
+	// Consensus rule change deployments.
+	//
+	// The miner confirmation window is defined as:
+	//   target proof of work timespan / target proof of work spacing
+	RuleChangeActivationThreshold: 1916, // 95% of MinerConfirmationWindow
+	MinerConfirmationWindow:       2016, //
+
+	// Address encoding magics
+	PubKeyHashAddrID: 60,
+	ScriptHashAddrID: 85,
+	PrivateKeyID:     188,
+
+	// BIP32 hierarchical deterministic extended key magics
+	HDPrivateKeyID: [4]byte{0x04, 0x88, 0xb2, 0x1e},
+	HDPublicKeyID:  [4]byte{0x04, 0x88, 0xad, 0xe4},
+}
+
+// RegressionNetParams defines the network parameters for the regression test
+// Bitcoin network.  Not to be confused with the test Bitcoin network (version
+// 3), this network is sometimes simply called "testnet".
+var RegressionNetParams = Params{
+	Name:        "test",
+	Net:         wire.TestNet,
+	DefaultPort: "19033",
+	DNSSeeds: []DNSSeed{
+		{"dnsseed.testnet.komodo.global", false},
+	},
+	// Chain parameters
+	GenesisBlock:     &testNetGenesisBlock,
+	GenesisHash:      &testnetGenesisHash,
+	CoinbaseMaturity: 100,
+	BIP0034Height:    0,
+	BIP0065Height:    0, // Used by regression tests
+	BIP0066Height:    0, // Used by regression tests
+
+	// Checkpoints ordered from oldest to newest.
+	Checkpoints: []Checkpoint{
+		{0, newHashFromStr("03e1c4bb705c871bf9bfda3e74b7f8f86bff267993c215a89d5795e3708e5e1f")},
+	},
 	// Consensus rule change deployments.
 	//
 	// The miner confirmation window is defined as:
@@ -346,13 +346,14 @@ var RegtestParams = Params{
 	MinerConfirmationWindow:       144,
 
 	// Address encoding magics
-	PubKeyHashAddrID: 0x2098, // starts with m or n
-	ScriptHashAddrID: 0x2092, // starts with 2
-	PrivateKeyID:     0xef,   // starts with 9 (uncompressed) or c (compressed)
+	// Address encoding magics
+	PubKeyHashAddrID: 60,
+	ScriptHashAddrID: 85,
+	PrivateKeyID:     188,
 
 	// BIP32 hierarchical deterministic extended key magics
-	HDPrivateKeyID: [4]byte{0x04, 0x35, 0x83, 0x94}, // starts with tprv
-	HDPublicKeyID:  [4]byte{0x04, 0x35, 0x87, 0xcf}, // starts with tpub
+	HDPrivateKeyID: [4]byte{0x04, 0x88, 0xb2, 0x1e},
+	HDPublicKeyID:  [4]byte{0x04, 0x88, 0xad, 0xe4},
 }
 
 var (
@@ -373,8 +374,8 @@ var (
 
 var (
 	registeredNets       = make(map[wire.BitcoinNet]struct{})
-	pubKeyHashAddrIDs    = make(map[uint16]struct{})
-	scriptHashAddrIDs    = make(map[uint16]struct{})
+	pubKeyHashAddrIDs    = make(map[byte]struct{})
+	scriptHashAddrIDs    = make(map[byte]struct{})
 	bech32SegwitPrefixes = make(map[string]struct{})
 	hdPrivToPubKeyIDs    = make(map[[4]byte][]byte)
 )
@@ -425,7 +426,7 @@ func mustRegister(params *Params) {
 // to the caller to check both this and IsScriptHashAddrID and decide whether an
 // address is a pubkey hash address, script hash address, neither, or
 // undeterminable (if both return true).
-func IsPubKeyHashAddrID(id uint16) bool {
+func IsPubKeyHashAddrID(id byte) bool {
 	_, ok := pubKeyHashAddrIDs[id]
 	return ok
 }
@@ -436,7 +437,7 @@ func IsPubKeyHashAddrID(id uint16) bool {
 // to the caller to check both this and IsPubKeyHashAddrID and decide whether an
 // address is a pubkey hash address, script hash address, neither, or
 // undeterminable (if both return true).
-func IsScriptHashAddrID(id uint16) bool {
+func IsScriptHashAddrID(id byte) bool {
 	_, ok := scriptHashAddrIDs[id]
 	return ok
 }

@@ -38,7 +38,7 @@ var (
 // and netID which encodes the bitcoin network and address type.  It is used
 // in both pay-to-pubkey-hash (P2PKH) and pay-to-script-hash (P2SH) address
 // encoding.
-func encodeAddress(hash160 []byte, netID uint16) string {
+func encodeAddress(hash160 []byte, netID byte) string {
 	// Format is 1 byte for a network and address class (i.e. P2PKH vs
 	// P2SH), 20 bytes for a RIPEMD160 hash, and 4 bytes of checksum.
 	return base58.CheckEncode(hash160[:ripemd160.Size], netID)
@@ -129,7 +129,7 @@ func DecodeAddress(addr string, defaultNet *chaincfg.Params) (Address, error) {
 // transaction.
 type AddressPubKeyHash struct {
 	hash  [ripemd160.Size]byte
-	netID uint16
+	netID byte
 }
 
 // NewAddressPubKeyHash returns a new AddressPubKeyHash.  pkHash mustbe 20
@@ -143,7 +143,7 @@ func NewAddressPubKeyHash(pkHash []byte, net *chaincfg.Params) (*AddressPubKeyHa
 // it up through its parameters.  This is useful when creating a new address
 // structure from a string encoding where the identifer byte is already
 // known.
-func newAddressPubKeyHash(pkHash []byte, netID uint16) (*AddressPubKeyHash, error) {
+func newAddressPubKeyHash(pkHash []byte, netID byte) (*AddressPubKeyHash, error) {
 	// Check for a valid pubkey hash length.
 	if len(pkHash) != ripemd160.Size {
 		return nil, errors.New("pkHash must be 20 bytes")
@@ -190,7 +190,7 @@ func (a *AddressPubKeyHash) Hash160() *[ripemd160.Size]byte {
 // transaction.
 type AddressScriptHash struct {
 	hash  [ripemd160.Size]byte
-	netID uint16
+	netID byte
 }
 
 // NewAddressScriptHash returns a new AddressScriptHash.
@@ -210,7 +210,7 @@ func NewAddressScriptHashFromHash(scriptHash []byte, net *chaincfg.Params) (*Add
 // looking it up through its parameters.  This is useful when creating a new
 // address structure from a string encoding where the identifer byte is already
 // known.
-func newAddressScriptHashFromHash(scriptHash []byte, netID uint16) (*AddressScriptHash, error) {
+func newAddressScriptHashFromHash(scriptHash []byte, netID byte) (*AddressScriptHash, error) {
 	// Check for a valid script hash length.
 	if len(scriptHash) != ripemd160.Size {
 		return nil, errors.New("scriptHash must be 20 bytes")
@@ -273,7 +273,7 @@ const (
 type AddressPubKey struct {
 	pubKeyFormat PubKeyFormat
 	pubKey       *btcec.PublicKey
-	pubKeyHashID uint16
+	pubKeyHashID byte
 }
 
 // NewAddressPubKey returns a new AddressPubKey which represents a pay-to-pubkey

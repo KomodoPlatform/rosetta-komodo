@@ -11,21 +11,21 @@ import (
 )
 
 var checkEncodingStringTests = []struct {
-	version uint16
+	version byte
 	in      string
 	out     string
 }{
-	{0x2089, "", "HCo8nxRe"},
-	{0x2089, " ", "2EWfSfEqw2"},
-	{0x2089, "-", "2EWgq6Y1Qs"},
-	{0x2089, "0", "2EWhCfRN3G"},
-	{0x2089, "1", "2EWhKra8WW"},
-	{0x2089, "-1", "6Se2nLNujPM"},
-	{0x2089, "11", "6Se4mwP8RKS"},
-	{0x2089, "abc", "R2CRaXTNrhq1"},
-	{0x2089, "1234598760", "522T7ibo3ettqS2LrcRYuv"},
-	{0x2089, "abcdefghijklmnopqrstuvwxyz", "3C1YgcLd1zZnGrDm53kG6zvtdC6kUQe9mRFXpm1L7A3E"},
-	{0x2089, "00000000000000000000000000000000000000000000000000000000000000", "5FtGq8oioEKbtgWgcC7DyW2RyqL2p8QkEkAb67B77pteiH531Lnqha2ypkaYZ9LZQS9cHLNGnMHWLKFU4ii9d2mF3QRBM"},
+	{60, "", "7rLnRLD"},
+	{60, " ", "WwehhPts"},
+	{60, "-", "Wy3QJvAz"},
+	{60, "0", "WyTagpXB"},
+	{60, "1", "WyWiavip"},
+	{60, "-1", "3HGLY1vtMX"},
+	{60, "11", "3HJL1BrnWA"},
+	{60, "abc", "B6mQSY3jaz6"},
+	{60, "1234598760", "2gfwmkMXD94oQG5xfVoEU"},
+	{60, "abcdefghijklmnopqrstuvwxyz", "vQF5toxmgBwCrqy4KXKCqtnVsb2Xw7zTeabKigpzD4"},
+	{60, "00000000000000000000000000000000000000000000000000000000000000", "2nUUTtgWGX9jjQ1mQpZH9EVa4gPgXTCTeNwEnWKwTum13bB89q5SRE2zY1eqC6VtxfFVBq2GbM8eJD5qcYcY7z4WzSxX"},
 }
 
 func TestBase58Check(t *testing.T) {
