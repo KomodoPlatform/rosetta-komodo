@@ -304,6 +304,7 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 			)
 		}
 
+		// [decker] PayToAddrReplayOutScript ?
 		hashReplayToByte, err := hex.DecodeString(metadata.ReplayBlockHash)
 		pkScript, err := txscript.PayToAddrReplayOutScript(addr, hashReplayToByte, metadata.ReplayBlockHeight)
 		if err != nil {
