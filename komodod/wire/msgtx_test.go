@@ -17,22 +17,6 @@ import (
 	"github.com/DeckerSU/rosetta-komodo/komodod/chaincfg/chainhash"
 )
 
-// [decker] just for debug (de)serialisation features, etc.
-func TestTransactions(t *testing.T) {
-	msg := NewMsgTx(1)
-	fmt.Printf("Size: %d\n", msg.SerializeSizeStripped())
-	buf := bytes.NewBuffer(make([]byte, 0, msg.SerializeSizeStripped()))
-	_ = msg.SerializeNoWitness(buf)
-
-	for _, b := range buf.Bytes() {
-		fmt.Printf("%02x ", b)
-	}
-
-	fmt.Println()
-
-	fmt.Printf("%x\n", buf.Bytes())
-}
-
 // TestTx tests the MsgTx API.
 func TestTx(t *testing.T) {
 	pver := ProtocolVersion

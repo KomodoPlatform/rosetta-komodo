@@ -17,10 +17,13 @@ package services
 import (
 	"context"
 	"encoding/hex"
+	"fmt"
 	"testing"
 
 	"github.com/DeckerSU/rosetta-komodo/configuration"
 	"github.com/DeckerSU/rosetta-komodo/komodo"
+	"github.com/DeckerSU/rosetta-komodo/komodod/wire"
+	"github.com/DeckerSU/rosetta-komodo/komodod/zec"
 	mocks "github.com/DeckerSU/rosetta-komodo/mocks/services"
 
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -43,6 +46,22 @@ func forceMarshalMap(t *testing.T, i interface{}) map[string]interface{} {
 	}
 
 	return m
+}
+
+// [decker] just for debug (de)serialisation features, etc.
+func TestTransactions(t *testing.T) {
+
+	msg := wire.NewMsgTx(4)
+	tx := zec.NewTxFromMsgTx(msg, 0) // Tx
+	fmt.Printf("%+v\n%+v\n", tx.MsgTx, tx)
+
+	bytes, err := tx.Bytes()
+	if err == nil {
+		for _, b := range bytes {
+			fmt.Printf("%02x", b)
+		}
+		fmt.Println()
+	}
 }
 
 func TestConstructionService(t *testing.T) {
