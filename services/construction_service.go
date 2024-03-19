@@ -203,19 +203,26 @@ func (s *ConstructionAPIService) ConstructionMetadata(
 		Currency: s.config.Currency,
 	}
 
+	// GetScriptPubKeys checks the amount as well; it will not allow incorrect
+	// amounts to be filled in the operation, as everything is validated through indexer data
 	scripts, err := s.i.GetScriptPubKeys(ctx, options.Coins)
 	if err != nil {
 		return nil, wrapErr(ErrScriptPubKeysMissing, err)
 	}
 
-	// Determine the blockhash for the replay protection
-	bestblockHash, err := s.client.GetBestBlock(ctx)
+	// Determine nExpiryHeight
+	bestblockHeight, err := s.client.GetBestBlock(ctx)
 	if err != nil {
 		return nil, wrapErr(ErrCouldNotGetBestBlock, err)
 	}
-	hashReplay, err := s.client.GetHashFromIndex(ctx, bestblockHash-100)
 
-	metadata, err := types.MarshalMap(&constructionMetadata{ScriptPubKeys: scripts, ReplayBlockHeight: bestblockHash - 100, ReplayBlockHash: hashReplay})
+	// https://github.com/DeckerSU/KomodoOcean/blob/281f59e32f3ce9914cb21746e1a885549aa8d962/src/main.cpp#L8866
+	nExpiryHeight := (bestblockHeight + 1) + 200 // nextBlockHeight + DEFAULT_TX_EXPIRY_DELTA (200)
+
+	metadata, err := types.MarshalMap(
+		&constructionMetadata{
+			ScriptPubKeys: scripts,
+			ExpiryHeight:  nExpiryHeight})
 	if err != nil {
 		return nil, wrapErr(ErrUnableToParseIntermediateResult, err)
 	}
@@ -303,9 +310,7 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 			)
 		}
 
-		// [decker] PayToAddrReplayOutScript ?
-		hashReplayToByte, err := hex.DecodeString(metadata.ReplayBlockHash)
-		pkScript, err := txscript.PayToAddrReplayOutScript(addr, hashReplayToByte, metadata.ReplayBlockHeight)
+		pkScript, err := txscript.PayToAddrScript(addr)
 		if err != nil {
 			return nil, wrapErr(
 				ErrUnableToDecodeAddress,

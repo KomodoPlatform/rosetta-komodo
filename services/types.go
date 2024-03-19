@@ -96,9 +96,8 @@ type preprocessOptions struct {
 }
 
 type constructionMetadata struct {
-	ScriptPubKeys     []*komodo.ScriptPubKey `json:"script_pub_keys"`
-	ReplayBlockHeight int64                  `json:"replay_block_height"`
-	ReplayBlockHash   string                 `json:"replay_block_hash"`
+	ScriptPubKeys []*komodo.ScriptPubKey `json:"script_pub_keys"`
+	ExpiryHeight  int64                  `json:"expiry_height"`
 }
 
 type signedTransaction struct {
