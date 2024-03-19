@@ -97,16 +97,15 @@ func (s *ConstructionAPIService) estimateSize(operations []*types.Operation) flo
 			size += komodo.OutputOverhead
 			addr, err := komodoutil.DecodeAddress(operation.Account.Address, s.config.Params)
 			if err != nil {
-				size += komodo.P2PKHReplayScriptPubkeySize
+				size += komodo.P2PKHScriptPubkeySize
 				continue
 			}
-			hashReplay, _ := hex.DecodeString("0000000000000000000000000000000000000000000000000000000000000000")
-			script, err := txscript.PayToAddrReplayOutScript(addr, hashReplay, 100)
+			// addr here can be AddressPubKeyHash, AddressScriptHash, AddressPubKey
+			script, err := txscript.PayToAddrScript(addr)
 			if err != nil {
-				size += komodo.P2PKHReplayScriptPubkeySize
+				size += komodo.P2PKHScriptPubkeySize
 				continue
 			}
-
 			size += len(script)
 		}
 	}

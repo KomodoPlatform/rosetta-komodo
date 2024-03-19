@@ -78,11 +78,14 @@ const (
 // Fee estimate constants
 // Source: https://bitcoinops.org/en/tools/calc-size/
 const (
-	MinFeeRate                  = float64(0.00001) // nolint:gomnd
-	TransactionOverhead         = 10               // 4 version, 1 vin, 1 vout, 4 lock time
-	InputSize                   = 147              // 4 prev index, 32 prev hash, 4 sequence, 1 script size, 106 script sig
-	OutputOverhead              = 9                // 8 value, 1 script size
-	P2PKHReplayScriptPubkeySize = 63               // P2PKH size with replay protection
+	MinFeeRate          = float64(0.00001) // nolint:gomnd
+	TransactionOverhead = 29               // 4 version, 1 vin, 1 vout, 4 lock time,
+	// 4 version group id, 4 expiry height, 8 valuebalance,
+	// 3 zero size (vShieldedSpend, vShieldedOutput, vjoinsplit)
+	InputSize                   = 148 // 4 prev index, 32 prev hash, 4 sequence, 1 script size, 107 script sig
+	OutputOverhead              = 9   // 8 value, 1 script size
+	P2PKHReplayScriptPubkeySize = 63  // P2PKH size with replay protection
+	P2PKHScriptPubkeySize       = 25  // P2PKH size
 )
 
 var (
