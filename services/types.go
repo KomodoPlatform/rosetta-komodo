@@ -24,7 +24,7 @@ import (
 const (
 	// NodeVersion is the version of
 	// komodod core we are using.
-	NodeVersion = "5.0.1"
+	NodeVersion = "0.8.2"
 
 	// HistoricalBalanceLookup indicates
 	// that historical balance lookup is supported.
