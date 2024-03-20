@@ -30,6 +30,7 @@ import (
 	"github.com/DeckerSU/rosetta-komodo/komodod/btcec"
 	"github.com/DeckerSU/rosetta-komodo/komodod/txscript"
 	"github.com/DeckerSU/rosetta-komodo/komodod/wire"
+	"github.com/DeckerSU/rosetta-komodo/komodod/zec"
 	"github.com/DeckerSU/rosetta-komodo/komodoutil"
 	"github.com/coinbase/rosetta-sdk-go/parser"
 	"github.com/coinbase/rosetta-sdk-go/server"
@@ -219,10 +220,16 @@ func (s *ConstructionAPIService) ConstructionMetadata(
 	// https://github.com/DeckerSU/KomodoOcean/blob/281f59e32f3ce9914cb21746e1a885549aa8d962/src/main.cpp#L8866
 	nExpiryHeight := (bestblockHeight + 1) + 200 // nextBlockHeight + DEFAULT_TX_EXPIRY_DELTA (200)
 
+	if nExpiryHeight < 0 || nExpiryHeight > zec.MaxExpiryHeight {
+		return nil, wrapErr(ErrUnclearIntent, errors.New("Invalid nExpiryHeight"))
+	}
+
+	var expiryHeightUint32 uint32 = uint32(nExpiryHeight)
+
 	metadata, err := types.MarshalMap(
 		&constructionMetadata{
 			ScriptPubKeys: scripts,
-			ExpiryHeight:  nExpiryHeight})
+			ExpiryHeight:  expiryHeightUint32})
 	if err != nil {
 		return nil, wrapErr(ErrUnableToParseIntermediateResult, err)
 	}
@@ -278,7 +285,11 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 		return nil, wrapErr(ErrUnableToParseIntermediateResult, err)
 	}
 
-	tx := wire.NewMsgTx(wire.TxVersion)
+	txBase := wire.NewMsgTx(wire.TxVersion)
+	expiryHeight := metadata.ExpiryHeight
+	tx := zec.NewTxFromMsgTx(txBase, expiryHeight)
+	println(tx)
+
 	for _, input := range matches[0].Operations {
 		if input.CoinChange == nil {
 			return nil, wrapErr(ErrUnclearIntent, errors.New("CoinChange cannot be nil"))
@@ -324,6 +335,30 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 		})
 	}
 
+	// fill the prevScripts and inputAmountsVal slices before, based on the provided metadata
+	prevScripts := make([][]byte, len(tx.TxIn))
+	inputAmountsVal := make([]int64, len(tx.TxIn))
+	for i := range tx.TxIn {
+		amount := matches[0].Amounts[i]
+		// TODO: may be perform an amount check as in GetScriptPubKeys,
+		// with i.blockStorage.FindTransaction, etc.?
+		if amount.Sign() < 0 {
+			amount.Neg(amount) // make amount positive
+		}
+		inputAmountStr := amount.String()
+		inputAmount, err := strconv.ParseInt(inputAmountStr, 10, 64)
+		if err != nil {
+			return nil, wrapErr(ErrUnclearIntent, errors.New("Can't convert amount")) // or ErrUnableToParseIntermediateResult?
+		}
+		inputAmountsVal[i] = inputAmount
+
+		pkScript, err := hex.DecodeString(metadata.ScriptPubKeys[i].Hex)
+		if err != nil {
+			return nil, wrapErr(ErrUnableToDecodeScriptPubKey, err)
+		}
+		prevScripts[i] = pkScript
+	}
+
 	// Create Signing Payloads (must be done after entire tx is constructed
 	// or hash will not be correct).
 	inputAmounts := make([]string, len(tx.TxIn))
@@ -347,21 +382,35 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 		inputAddresses[i] = address
 		inputAmounts[i] = matches[0].Amounts[i].String()
 
-		if class != txscript.PubKeyHashReplayOutTy && class != txscript.PubKeyHashTy {
+		allowedClasses := map[txscript.ScriptClass]bool{
+			txscript.PubKeyHashTy: true,
+			txscript.ScriptHashTy: false,
+			txscript.MultiSigTy:   false,
+		}
+		if !allowedClasses[class] {
 			return nil, wrapErr(
 				ErrUnsupportedScriptType,
 				fmt.Errorf("unupported script type: %s", class),
 			)
 		}
-		hash, err := txscript.CalcSignatureHash(
-			script,
-			txscript.SigHashAll,
-			tx,
-			i,
-		)
+
+		// calculate signature digest
+		digest, err := tx.SignatureDigest(i, txscript.SigHashAll, inputAmountsVal, prevScripts)
 		if err != nil {
 			return nil, wrapErr(ErrUnableToCalculateSignatureHash, err)
 		}
+		hash := digest[:]
+
+		// hash, err := txscript.CalcSignatureHash(
+		// 	script,
+		// 	txscript.SigHashAll,
+		// 	tx,
+		// 	i,
+		// )
+
+		// if err != nil {
+		// 	return nil, wrapErr(ErrUnableToCalculateSignatureHash, err)
+		// }
 
 		payloads[i] = &types.SigningPayload{
 			AccountIdentifier: &types.AccountIdentifier{
@@ -373,9 +422,15 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 
 	}
 
-	buf := bytes.NewBuffer(make([]byte, 0, tx.SerializeSize()))
-	if err := tx.Serialize(buf); err != nil {
+	// Serialisation via tx.Bytes(), not via tx.Serialize(buf)
+	buf := bytes.NewBuffer(make([]byte, 0, zec.CalcTxSize(txBase)))
+	rawTxBytes, err := tx.Bytes()
+	if err != nil {
 		return nil, wrapErr(ErrUnableToParseIntermediateResult, err)
+	}
+	_, writeErr := buf.Write(rawTxBytes)
+	if writeErr != nil {
+		return nil, wrapErr(ErrUnableToParseIntermediateResult, writeErr)
 	}
 
 	rawTx, err := json.Marshal(&unsignedTransaction{

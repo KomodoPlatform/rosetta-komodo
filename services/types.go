@@ -97,7 +97,7 @@ type preprocessOptions struct {
 
 type constructionMetadata struct {
 	ScriptPubKeys []*komodo.ScriptPubKey `json:"script_pub_keys"`
-	ExpiryHeight  int64                  `json:"expiry_height"`
+	ExpiryHeight  uint32                 `json:"expiry_height"`
 }
 
 type signedTransaction struct {
