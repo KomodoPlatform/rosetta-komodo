@@ -395,7 +395,7 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 		}
 
 		// calculate signature digest
-		digest, err := tx.SignatureDigest(i, txscript.SigHashAll, inputAmountsVal, prevScripts)
+		digest, err := tx.SignatureDigest(i, txscript.SigHashAll, script, inputAmountsVal, prevScripts)
 		if err != nil {
 			return nil, wrapErr(ErrUnableToCalculateSignatureHash, err)
 		}
