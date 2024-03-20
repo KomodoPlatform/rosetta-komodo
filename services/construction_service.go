@@ -615,8 +615,8 @@ func (s *ConstructionAPIService) parseUnsignedTransaction(
 		)
 	}
 
-	var tx wire.MsgTx
-	if err := tx.Deserialize(bytes.NewReader(decodedCoreTx)); err != nil {
+	tx, err := zec.DeserializeTx(decodedCoreTx)
+	if err != nil {
 		return nil, wrapErr(
 			ErrUnableToParseIntermediateResult,
 			fmt.Errorf("%w unable to deserialize tx", err),
