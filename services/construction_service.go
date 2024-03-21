@@ -632,6 +632,14 @@ func (s *ConstructionAPIService) parseUnsignedTransaction(
 		)
 	}
 
+	if len(unsigned.InputAmounts) != len(unsigned.InputAddresses) {
+		return nil, wrapErr(
+			ErrUnableToParseIntermediateResult,
+			fmt.Errorf("incorrect unsigned_transaction, len(input_amounts) != len(input_addresses), %d != %d",
+				len(unsigned.InputAmounts), len(unsigned.InputAddresses)),
+		)
+	}
+
 	ops := []*types.Operation{}
 	for i, input := range tx.TxIn {
 		networkIndex := int64(i)
