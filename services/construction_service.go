@@ -728,11 +728,11 @@ func (s *ConstructionAPIService) parseSignedTransaction(
 		)
 	}
 
-	var tx wire.MsgTx
-	if err := tx.Deserialize(bytes.NewReader(serializedTx)); err != nil {
+	tx, err := zec.DeserializeTx(serializedTx)
+	if err != nil {
 		return nil, wrapErr(
 			ErrUnableToParseIntermediateResult,
-			fmt.Errorf("%w unable to decode msgTx", err),
+			fmt.Errorf("%w unable to deserialize tx", err),
 		)
 	}
 
