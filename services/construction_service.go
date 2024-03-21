@@ -582,7 +582,7 @@ func (s *ConstructionAPIService) ConstructionHash(
 		)
 	}
 
-	tx, err := komodoutil.NewTxFromBytes(bytesTx)
+	tx, err := zec.DeserializeTx(bytesTx)
 	if err != nil {
 		return nil, wrapErr(
 			ErrUnableToParseIntermediateResult,
@@ -592,7 +592,7 @@ func (s *ConstructionAPIService) ConstructionHash(
 
 	return &types.TransactionIdentifierResponse{
 		TransactionIdentifier: &types.TransactionIdentifier{
-			Hash: tx.Hash().String(),
+			Hash: tx.TxHash().String(),
 		},
 	}, nil
 }
