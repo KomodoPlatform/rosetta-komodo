@@ -288,7 +288,6 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 	txBase := wire.NewMsgTx(wire.TxVersion)
 	expiryHeight := metadata.ExpiryHeight
 	tx := zec.NewTxFromMsgTx(txBase, expiryHeight)
-	println(tx)
 
 	for _, input := range matches[0].Operations {
 		if input.CoinChange == nil {
