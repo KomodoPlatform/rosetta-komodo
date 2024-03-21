@@ -1,21 +1,21 @@
 <p align="center">
   <a href="https://www.rosetta-api.org">
-    <img width="90%" alt="Rosetta" src="https://www.rosetta-api.org/img/rosetta_header.png">
+    <img width="90%" alt="Rosetta" src="https://github.com/DeckerSU/rosetta-komodo/assets/22120003/7574ebc7-d7f7-4a52-b762-edd5d83ec428">
   </a>
 </p>
 <h3 align="center">
    Rosetta Komodo
 </h3>
-<p align="center">
+<!-- <p align="center">
   <a href="https://travis-ci.com/github/DeckerSU/rosetta-komodo"><img src="https://travis-ci.com/DeckerSU/rosetta-komodo.svg?branch=rosetta-komodo" /></a>
   <a href="https://coveralls.io/github/DeckerSU/rosetta-komodo"><img src="https://coveralls.io/repos/github/DeckerSU/rosetta-komodo/badge.svg" /></a>
   <a href="https://goreportcard.com/report/github.com/DeckerSU/rosetta-komodo"><img src="https://goreportcard.com/badge/github.com/DeckerSU/rosetta-komodo" /></a>
   <a href="https://github.com/DeckerSU/rosetta-komodo/blob/master/LICENSE.txt"><img src="https://img.shields.io/github/license/DeckerSU/rosetta-komodo.svg" /></a>
-</p>
+</p> -->
 
 ## Overview
 `rosetta-komodo` provides an implementation of the Rosetta API for the
-Horizen network in Golang. If you haven't heard of the Rosetta API, you can find more
+Komodo network in Golang. If you haven't heard of the Rosetta API, you can find more
 information [here](https://rosetta-api.org).
 
 ## Usage
