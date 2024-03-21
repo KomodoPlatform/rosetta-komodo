@@ -335,22 +335,20 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 		})
 	}
 
+	// define closure absInt64 to get the absolute value of an int64
+	absInt64 := func(x int64) int64 {
+		if x < 0 {
+			return -x
+		}
+		return x
+	}
+
 	// fill the prevScripts and inputAmountsVal slices before, based on the provided metadata
 	prevScripts := make([][]byte, len(tx.TxIn))
 	inputAmountsVal := make([]int64, len(tx.TxIn))
 	for i := range tx.TxIn {
 		amount := matches[0].Amounts[i]
-		// TODO: may be perform an amount check as in GetScriptPubKeys,
-		// with i.blockStorage.FindTransaction, etc.?
-		if amount.Sign() < 0 {
-			amount.Neg(amount) // make amount positive
-		}
-		inputAmountStr := amount.String()
-		inputAmount, err := strconv.ParseInt(inputAmountStr, 10, 64)
-		if err != nil {
-			return nil, wrapErr(ErrUnclearIntent, errors.New("Can't convert amount")) // or ErrUnableToParseIntermediateResult?
-		}
-		inputAmountsVal[i] = inputAmount
+		inputAmountsVal[i] = absInt64(amount.Int64())
 
 		pkScript, err := hex.DecodeString(metadata.ScriptPubKeys[i].Hex)
 		if err != nil {
