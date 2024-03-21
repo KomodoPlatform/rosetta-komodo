@@ -86,7 +86,7 @@ func TestConstructionService(t *testing.T) {
 	publicKey := &types.PublicKey{
 		Bytes: forceHexDecode(
 			t,
-			"03164f76360ef79e7513eff3095e8b60a5cf98223bed0d3109aaabe5f061be4140",
+			"02a854251adfee222bede8396fed0756985d4ea905f72611740867c7a4ad6488c1",
 		),
 		CurveType: types.Secp256k1,
 	}
@@ -97,7 +97,7 @@ func TestConstructionService(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, &types.ConstructionDeriveResponse{
 		AccountIdentifier: &types.AccountIdentifier{
-			Address: "ztcHp2reR5d4AhZLLp5bYELzfZXHQERQogi",
+			Address: "RVNKRr2uxPMxJeDwFnTKjdtiLtcs7UzCZn",
 		},
 	}, deriveResponse)
 
@@ -109,15 +109,15 @@ func TestConstructionService(t *testing.T) {
 			},
 			Type: komodo.InputOpType,
 			Account: &types.AccountIdentifier{
-				Address: "ztcHp2reR5d4AhZLLp5bYELzfZXHQERQogi",
+				Address: "RVNKRr2uxPMxJeDwFnTKjdtiLtcs7UzCZn",
 			},
 			Amount: &types.Amount{
-				Value:    "-1000000000",
+				Value:    "-7777",
 				Currency: komodo.TestnetCurrency,
 			},
 			CoinChange: &types.CoinChange{
 				CoinIdentifier: &types.CoinIdentifier{
-					Identifier: "a2b082a14210712ea7d1edd317273154e102a3517c144240da2b8ed696305b08:1",
+					Identifier: "2916417b6e4f81ea0edf75249793b2949cc35aa512f5e4e739d5712385104ee7:0",
 				},
 				CoinAction: types.CoinSpent,
 			},
@@ -128,10 +128,10 @@ func TestConstructionService(t *testing.T) {
 			},
 			Type: komodo.OutputOpType,
 			Account: &types.AccountIdentifier{
-				Address: "ztfPiJyJL3UavuYw5Fiv1V1okdbsmY1b5qX",
+				Address: "RVNKRr2uxPMxJeDwFnTKjdtiLtcs7UzCZn",
 			},
 			Amount: &types.Amount{
-				Value:    "1000000000",
+				Value:    "7777",
 				Currency: komodo.TestnetCurrency,
 			},
 		},
@@ -148,15 +148,15 @@ func TestConstructionService(t *testing.T) {
 		Coins: []*types.Coin{
 			{
 				CoinIdentifier: &types.CoinIdentifier{
-					Identifier: "a2b082a14210712ea7d1edd317273154e102a3517c144240da2b8ed696305b08:1",
+					Identifier: "2916417b6e4f81ea0edf75249793b2949cc35aa512f5e4e739d5712385104ee7:0",
 				},
 				Amount: &types.Amount{
-					Value:    "-1000000000",
+					Value:    "-7777",
 					Currency: komodo.TestnetCurrency,
 				},
 			},
 		},
-		EstimatedSize: 227,
+		EstimatedSize: 211,
 	}
 	assert.Equal(t, &types.ConstructionPreprocessResponse{
 		Options: forceMarshalMap(t, options),
@@ -166,17 +166,16 @@ func TestConstructionService(t *testing.T) {
 	metadata := &constructionMetadata{
 		ScriptPubKeys: []*komodo.ScriptPubKey{
 			{
-				ASM:          "OP_DUP OP_HASH160 64352ca2f736dc4e7464a65f8b07ef313d7ab53d OP_EQUALVERIFY OP_CHECKSIG b6ce3a2fb53f49ce31bcf2d404cf3bfa88caf71bd5ec0b4b1dc7eef8ad89470d 11 OP_CHECKBLOCKATHEIGHT",
-				Hex:          "76a91464352ca2f736dc4e7464a65f8b07ef313d7ab53d88ac20b6ce3a2fb53f49ce31bcf2d404cf3bfa88caf71bd5ec0b4b1dc7eef8ad89470d5bb4",
+				ASM:          "OP_DUP OP_HASH160 dc5abb3c56eba571a0910fe18fa8f205d29a06e3 OP_EQUALVERIFY OP_CHECKSIG",
+				Hex:          "76a914dc5abb3c56eba571a0910fe18fa8f205d29a06e388ac",
 				RequiredSigs: 1,
-				Type:         "pubkeyhashreplay",
+				Type:         "pubkeyhash",
 				Addresses: []string{
-					"ztcHp2reR5d4AhZLLp5bYELzfZXHQERQogi",
+					"RVNKRr2uxPMxJeDwFnTKjdtiLtcs7UzCZn",
 				},
 			},
 		},
-		ReplayBlockHeight: 212,
-		ReplayBlockHash:   "0786aeb320d7eb3c98486eba566b2c2ff893e39abd62e647560b15240f8216f8",
+		ExpiryHeight: 3856307,
 	}
 
 	// Normal Fee
@@ -193,18 +192,18 @@ func TestConstructionService(t *testing.T) {
 		ctx,
 		defaultConfirmationTarget,
 	).Return(
-		komodo.MinFeeRate*10,
+		komodo.MinFeeRate, // * 10
 		nil,
 	).Once()
 	mockClient.On(
 		"GetBestBlock",
 		ctx).Return(
-		int64(312), nil).Twice()
+		int64(3856106), nil).Twice()
 	mockClient.On(
 		"GetHashFromIndex",
 		ctx,
-		int64(212)).Return(
-		"0786aeb320d7eb3c98486eba566b2c2ff893e39abd62e647560b15240f8216f8", nil).Twice()
+		int64(3856106)).Return(
+		"087ae551e951edd04608a00c62b1df618b83ca9abcbf96aec919aa174932ab82", nil).Twice()
 
 	metadataResponse, err := servicer.ConstructionMetadata(ctx, &types.ConstructionMetadataRequest{
 		NetworkIdentifier: networkIdentifier,
@@ -215,7 +214,7 @@ func TestConstructionService(t *testing.T) {
 		Metadata: forceMarshalMap(t, metadata),
 		SuggestedFee: []*types.Amount{
 			{
-				Value:    "2270", // 1,420 * 0.75
+				Value:    "211",
 				Currency: komodo.TestnetCurrency,
 			},
 		},
@@ -247,7 +246,7 @@ func TestConstructionService(t *testing.T) {
 		Metadata: forceMarshalMap(t, metadata),
 		SuggestedFee: []*types.Amount{
 			{
-				Value:    "227", // we don't go below minimum fee rate
+				Value:    "211",
 				Currency: komodo.TestnetCurrency,
 			},
 		},
@@ -268,15 +267,15 @@ func TestConstructionService(t *testing.T) {
 			},
 			Type: komodo.InputOpType,
 			Account: &types.AccountIdentifier{
-				Address: "ztcHp2reR5d4AhZLLp5bYELzfZXHQERQogi",
+				Address: "RVNKRr2uxPMxJeDwFnTKjdtiLtcs7UzCZn",
 			},
 			Amount: &types.Amount{
-				Value:    "-1000000000",
+				Value:    "-7777",
 				Currency: komodo.TestnetCurrency,
 			},
 			CoinChange: &types.CoinChange{
 				CoinIdentifier: &types.CoinIdentifier{
-					Identifier: "a2b082a14210712ea7d1edd317273154e102a3517c144240da2b8ed696305b08:1",
+					Identifier: "2916417b6e4f81ea0edf75249793b2949cc35aa512f5e4e739d5712385104ee7:0",
 				},
 				CoinAction: types.CoinSpent,
 			},
@@ -288,10 +287,10 @@ func TestConstructionService(t *testing.T) {
 			},
 			Type: komodo.OutputOpType,
 			Account: &types.AccountIdentifier{
-				Address: "ztfPiJyJL3UavuYw5Fiv1V1okdbsmY1b5qX",
+				Address: "RVNKRr2uxPMxJeDwFnTKjdtiLtcs7UzCZn",
 			},
 			Amount: &types.Amount{
-				Value:    "1000000000",
+				Value:    "7777",
 				Currency: komodo.TestnetCurrency,
 			},
 		},
@@ -302,15 +301,15 @@ func TestConstructionService(t *testing.T) {
 	signingPayload := &types.SigningPayload{
 		Bytes: forceHexDecode(
 			t,
-			"7068aa7955b0469aa51cefcf0ae0a45448fe945a4f606ca373df1f4c3ca8002f",
+			"2857097bb7d8bf130f6350e35ac07cd0c45665563e9e0e2c55b48fa45f1f1d94",
 		),
 		AccountIdentifier: &types.AccountIdentifier{
-			Address: "ztcHp2reR5d4AhZLLp5bYELzfZXHQERQogi",
+			Address: "RVNKRr2uxPMxJeDwFnTKjdtiLtcs7UzCZn",
 		},
 		SignatureType: types.Ecdsa,
 	}
 
-	unsignedRaw := "7b227472616e73616374696f6e223a2230313030303030303031303835623330393664363865326264613430343231343763353161333032653135343331323731376433656464316137326537313130343261313832623061323031303030303030303066666666666666663031303063613961336230303030303030303365373661393134383633623435353736613133306463396338343838326436366663656165393235363463656230663838616332306638313638323066323431353062353634376536363262643961653339336638326632633662353662613665343839383363656264373230623361653836303730326434303062343030303030303030222c227363726970745075624b657973223a5b7b2261736d223a224f505f445550204f505f484153483136302036343335326361326637333664633465373436346136356638623037656633313364376162353364204f505f455155414c564552494659204f505f434845434b5349472062366365336132666235336634396365333162636632643430346366336266613838636166373162643565633062346231646337656566386164383934373064203131204f505f434845434b424c4f434b4154484549474854222c22686578223a22373661393134363433353263613266373336646334653734363461363566386230376566333133643761623533643838616332306236636533613266623533663439636533316263663264343034636633626661383863616637316264356563306234623164633765656638616438393437306435626234222c2272657153696773223a312c2274797065223a227075626b6579686173687265706c6179222c22616464726573736573223a5b227a746348703272655235643441685a4c4c70356259454c7a665a5848514552516f6769225d7d5d2c22696e7075745f616d6f756e7473223a5b222d31303030303030303030225d2c22696e7075745f616464726573736573223a5b227a746348703272655235643441685a4c4c70356259454c7a665a5848514552516f6769225d7d"
+	unsignedRaw := "7b227472616e73616374696f6e223a2230343030303038303835323032663839303165373465313038353233373164353339653765346635313261353561633339633934623239333937323437356466306565613831346636653762343131363239303030303030303030306666666666666666303136313165303030303030303030303030313937366139313464633561626233633536656261353731613039313066653138666138663230356432396130366533383861633030303030303030623364373361303030303030303030303030303030303030303030303030222c227363726970745075624b657973223a5b7b2261736d223a224f505f445550204f505f484153483136302064633561626233633536656261353731613039313066653138666138663230356432396130366533204f505f455155414c564552494659204f505f434845434b534947222c22686578223a223736613931346463356162623363353665626135373161303931306665313866613866323035643239613036653338386163222c2272657153696773223a312c2274797065223a227075626b657968617368222c22616464726573736573223a5b2252564e4b5272327578504d784a654477466e544b6a6474694c74637337557a435a6e225d7d5d2c22696e7075745f616d6f756e7473223a5b2237373737225d2c22696e7075745f616464726573736573223a5b2252564e4b5272327578504d784a654477466e544b6a6474694c74637337557a435a6e225d7d"
 
 	assert.Equal(t, &types.ConstructionPayloadsResponse{
 		UnsignedTransaction: unsignedRaw,
