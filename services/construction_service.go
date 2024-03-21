@@ -421,7 +421,7 @@ func (s *ConstructionAPIService) ConstructionPayloads(
 	}
 
 	// Serialisation via tx.Bytes(), not via tx.Serialize(buf)
-	buf := bytes.NewBuffer(make([]byte, 0, zec.CalcTxSize(txBase)))
+	buf := bytes.NewBuffer(make([]byte, 0, tx.SerializeSize()))
 	rawTxBytes, err := tx.Bytes()
 	if err != nil {
 		return nil, wrapErr(ErrUnableToParseIntermediateResult, err)
@@ -485,8 +485,8 @@ func (s *ConstructionAPIService) ConstructionCombine(
 		)
 	}
 
-	var tx wire.MsgTx
-	if err := tx.Deserialize(bytes.NewReader(decodedCoreTx)); err != nil {
+	tx, err := zec.DeserializeTx(decodedCoreTx)
+	if err != nil {
 		return nil, wrapErr(
 			ErrUnableToParseIntermediateResult,
 			fmt.Errorf("%w unable to deserialize tx", err),
@@ -510,7 +510,13 @@ func (s *ConstructionAPIService) ConstructionCombine(
 		fullsig := normalizeSignature(request.Signatures[i].Bytes)
 		pkData := request.Signatures[i].PublicKey.Bytes
 
-		if class != txscript.PubKeyHashReplayOutTy && class != txscript.PubKeyHashTy {
+		allowedClasses := map[txscript.ScriptClass]bool{
+			txscript.PubKeyHashTy: true,
+			txscript.ScriptHashTy: false,
+			txscript.MultiSigTy:   false,
+		}
+
+		if !allowedClasses[class] {
 			return nil, wrapErr(
 				ErrUnsupportedScriptType,
 				fmt.Errorf("unupported script type: %s", class),
@@ -524,8 +530,13 @@ func (s *ConstructionAPIService) ConstructionCombine(
 	}
 
 	buf := bytes.NewBuffer(make([]byte, 0, tx.SerializeSize()))
-	if err := tx.Serialize(buf); err != nil {
+	rawTxBytes, err := tx.Bytes()
+	if err != nil {
 		return nil, wrapErr(ErrUnableToParseIntermediateResult, fmt.Errorf("%w serialize tx", err))
+	}
+	_, writeErr := buf.Write(rawTxBytes)
+	if writeErr != nil {
+		return nil, wrapErr(ErrUnableToParseIntermediateResult, writeErr)
 	}
 
 	rawTx, err := json.Marshal(&signedTransaction{
