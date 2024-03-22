@@ -1,7 +1,6 @@
 package komodo
 
 import (
-	"github.com/coinbase/rosetta-sdk-go/storage"
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
@@ -354,7 +353,7 @@ var allTheAboveBlock = &Block{
 	// },
 }
 
-var allTheAboveCoins = map[string]*storage.AccountCoin{
+var allTheAboveCoins = map[string]*types.AccountCoin{
 	"daf5e1b9aef597d666583e311b5e507d27a6d52adc12842a238fa73d2b22667f:0": {
 		Account: &types.AccountIdentifier{
 			Address: "ztcFDfp9xS7AfgeiLbdJLwbcFjNeHS1UBmb",
@@ -391,7 +390,7 @@ var allTheAboveExpectedBlock = &types.Block{
 						NetworkIndex: Int64Pointer(0),
 					},
 					Type:   CoinbaseOpType,
-					Status: SuccessStatus,
+					Status: types.String(SuccessStatus),
 					Metadata: MustMarshalMap(&OperationMetadata{
 						Coinbase: "03ede3120044656661756c7420732d6e6f6d7020706f6f6c2068747470733a2f2f6769746875622e636f6d2f732d6e6f6d702f732d6e6f6d702f77696b692f496e73696768742d706f6f6c2d6c696e6b",
 						Sequence: 4294967295,
@@ -403,7 +402,7 @@ var allTheAboveExpectedBlock = &types.Block{
 						NetworkIndex: Int64Pointer(0),
 					},
 					Type:   OutputOpType,
-					Status: SuccessStatus,
+					Status: types.String(SuccessStatus),
 					Account: &types.AccountIdentifier{
 						Address: "zto4YEJgg4dvbkGebcDiY2E2EYrcB1Qj5ws", // nolint
 						SubAccount: &types.SubAccountIdentifier{
@@ -438,7 +437,7 @@ var allTheAboveExpectedBlock = &types.Block{
 						NetworkIndex: Int64Pointer(1),
 					},
 					Type:   OutputOpType,
-					Status: SuccessStatus,
+					Status: types.String(SuccessStatus),
 					Account: &types.AccountIdentifier{
 						Address: "zrFwQjR613EuvLSufoNvUzZrfKvjSQx5a23", // nolint
 						SubAccount: &types.SubAccountIdentifier{
@@ -486,7 +485,7 @@ var allTheAboveExpectedBlock = &types.Block{
 						NetworkIndex: Int64Pointer(0),
 					},
 					Type:   InputOpType,
-					Status: SuccessStatus,
+					Status: types.String(SuccessStatus),
 					Account: &types.AccountIdentifier{
 						Address: "ztcFDfp9xS7AfgeiLbdJLwbcFjNeHS1UBmb",
 					},
@@ -515,7 +514,7 @@ var allTheAboveExpectedBlock = &types.Block{
 						NetworkIndex: Int64Pointer(0),
 					},
 					Type:   OutputOpType,
-					Status: SuccessStatus,
+					Status: types.String(SuccessStatus),
 					Account: &types.AccountIdentifier{
 						Address: "ztcFDfp9xS7AfgeiLbdJLwbcFjNeHS1UBmb",
 					},
@@ -555,7 +554,7 @@ var allTheAboveExpectedBlock = &types.Block{
 						NetworkIndex: Int64Pointer(0),
 					},
 					Type:   InputOpType,
-					Status: SuccessStatus,
+					Status: types.String(SuccessStatus),
 					Account: &types.AccountIdentifier{
 						Address: "ztcFDfp9xS7AfgeiLbdJLwbcFjNeHS1UBmb",
 					},
@@ -583,7 +582,7 @@ var allTheAboveExpectedBlock = &types.Block{
 						NetworkIndex: Int64Pointer(0),
 					},
 					Type:   OutputOpType,
-					Status: SuccessStatus,
+					Status: types.String(SuccessStatus),
 					Account: &types.AccountIdentifier{
 						Address: "ztpha3vQzv7eTdBvPC1oWnouuManmCEVbTT",
 					},
@@ -623,7 +622,7 @@ var allTheAboveExpectedBlock = &types.Block{
 						NetworkIndex: Int64Pointer(1),
 					},
 					Type:   OutputOpType,
-					Status: SuccessStatus,
+					Status: types.String(SuccessStatus),
 					Account: &types.AccountIdentifier{
 						Address: "zteqa5taBUZaJFsTJpmD9KVvCSfWjEG7w2S",
 					},
