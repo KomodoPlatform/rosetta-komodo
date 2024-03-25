@@ -158,7 +158,7 @@ func main() {
 		services.HistoricalBalanceLookup,
 		[]*types.NetworkIdentifier{cfg.Network},
 		nil,
-		false,
+		services.MempoolCoins,
 		"",
 	)
 	if err != nil {
