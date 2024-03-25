@@ -52,7 +52,7 @@ func (s *AccountAPIService) AccountBalance(
 	// If we are fetching the current balance,
 	// return all coins for an address and calculate
 	// the balance from those coins.
-	if request.BlockIdentifier == nil {
+	/* 	if request.BlockIdentifier == nil {
 		coins, block, err := s.i.GetCoins(ctx, request.AccountIdentifier)
 		if err != nil {
 			return nil, wrapErr(ErrUnableToGetCoins, err)
@@ -75,7 +75,7 @@ func (s *AccountAPIService) AccountBalance(
 				},
 			},
 		}, nil
-	}
+	} */
 
 	// If we are fetching a historical balance,
 	// use balance storage and don't return coins.
