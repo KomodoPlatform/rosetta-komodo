@@ -735,11 +735,11 @@ func (b *Client) parseOutputTransactionOperation(
 	}
 
 	// if it's a coinbase output and we are not in regtest populate SubAccount field
-	if txIndex == 0 && b.genesisBlockIdentifier.Hash != RegtestGenesisBlockIdentifier.Hash {
-		account.SubAccount = &types.SubAccountIdentifier{
-			Address: "coinbase",
-		}
-	}
+	// if txIndex == 0 && b.genesisBlockIdentifier.Hash != RegtestGenesisBlockIdentifier.Hash {
+	// 	account.SubAccount = &types.SubAccountIdentifier{
+	// 		Address: "coinbase",
+	// 	}
+	// }
 
 	// If this is an OP_RETURN locking script,
 	// we don't create a coin because it is provably unspendable.
