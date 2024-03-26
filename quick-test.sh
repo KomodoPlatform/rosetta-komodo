@@ -14,8 +14,11 @@
 
 API_ENDPOINT=127.0.0.1:8000
 
-if false; then
-    addresses=("RMUCCfZf42bEP1HvJsRjbXyYHkKusJsf4s" "RB8kzeTovoBpxgzmG3xaFDZWimC2PU8pKj")
+if true; then
+    addresses=("RMUCCfZf42bEP1HvJsRjbXyYHkKusJsf4s" \
+               "RB8kzeTovoBpxgzmG3xaFDZWimC2PU8pKj" \
+               "RHALqex895MT9XGitGTQXtmhADv4voEDeF" \
+              )
 
     for address in "${addresses[@]}"; do
         res1=$(curl -s -L -X POST 'http://'${API_ENDPOINT}'/account/balance' \
@@ -43,64 +46,11 @@ else
     echo "❌ The address does not match. (${address})"
 fi
 
-curl -s -L -X POST 'http://'${API_ENDPOINT}'/account/balance' \
-    -H 'Content-Type: application/json' \
-    -H 'Accept: application/json' \
-    --data-raw '{"network_identifier":{"blockchain":"Komodo","network":"main"},"account_identifier":{"address":"RB8kzeTovoBpxgzmG3xaFDZWimC2PU8pKj"}}' | jq .
+# curl -s -L -X POST 'http://'${API_ENDPOINT}'/account/balance' \
+#     -H 'Content-Type: application/json' \
+#     -H 'Accept: application/json' \
+#     --data-raw '{"network_identifier":{"blockchain":"Komodo","network":"main"},"account_identifier":{"address":"RB8kzeTovoBpxgzmG3xaFDZWimC2PU8pKj"}}' | jq -r .balances[0].value
 
-curl -v -L -X POST 'http://'${API_ENDPOINT}'/construction/payloads' \
--H 'Content-Type: application/json' \
--H 'Accept: application/json' \
---data-raw '{
-    "network_identifier": {
-        "blockchain": "Komodo",
-        "network": "main"
-    },
-    "public_keys":[{
-        "hex_bytes":"032ba2d26c2c0ecaf03464f7b3ba2b3893699fdbdc17d5f7eb9812ab58743f1c03",
-        "curve_type":"secp256k1"}
-    ],
-    "operations": [
-        {
-            "operation_identifier": {
-                "index": 0
-            },
-            "type": "INPUT",
-            "account": {
-                "address": "RB8kzeTovoBpxgzmG3xaFDZWimC2PU8pKj"
-            },
-            "amount": {
-                "value": "-50000000",
-                "currency": {
-                    "symbol": "KMD",
-                    "decimals": 8
-                }
-            },
-            "coin_change": {
-                "coin_identifier": {
-                    "identifier": "1515a68eb1d64bd92499d639229bebf5075216090eaaff4c5afc270772176b6a:0"
-                },
-                "coin_action": "coin_spent"
-            }
-        },
-        {
-            "operation_identifier": {
-                "index": 1
-            },
-            "type": "OUTPUT",
-            "account": {
-                "address": "RB8kzeTovoBpxgzmG3xaFDZWimC2PU8pKj"
-            },
-            "amount": {    
-                "value": "39980000",
-                "currency": {
-                    "symbol": "KMD",
-                    "decimals": 8
-                }
-            }
-        }
-    ]
-}';
 # 0400008085202f89037882b132b244f3910fcb3ffbfe69498e40fa7da823e08b465d8ccfc975dcba45010000006a4730440220480e05f7ed486c83e77db424923e0e8ec30f4fca8fcf95a9b4b83b2254018ce602203643aed2635fea279afa91a87c780132dbb1045c767fbeb8f465c06a7fd8e967012103de25408efa876cde9d42bb6a99b0ac6d2a4de9e5073165f64acf7198627e426dffffffff1ea6b748b82d869d9a7c39665918b0d635e13581bfa8d00a557dec51901d1d22000000006a4730440220544b309f8b3893ff63e422e06b10089d666d487d8b2879d4cec6b2a47c39600502203f92c8ce98994711e54e4161953da96de7d8b3bdf03679b1bd72c5dff3fd60ac012103de25408efa876cde9d42bb6a99b0ac6d2a4de9e5073165f64acf7198627e426dffffffff572953c3b0cff747cc303a2a86d418d23c110a64e0fd7ca1baad9c75539cf4ad000000006a47304402206b872aa9a968ff675839fe3d55eec0ecf01ea9263a6705e7e5d641bcc353f272022014c060a3ab5f5e82a514e2f9eabb334ed35ef4ed23a7dfd72e484abedf2307cc012103de25408efa876cde9d42bb6a99b0ac6d2a4de9e5073165f64acf7198627e426dffffffff0271cba204000000001976a9141457fc1ea749025759c40aad94bb2ef595b13b3088ace879360d000000001976a91485b630193f8d9025495f51b4a3f884d32b92fa1d88acfc44f465000000000000000000000000000000
 
 # curl -s -L -X POST 'http://'${API_ENDPOINT}'/construction/parse' \
