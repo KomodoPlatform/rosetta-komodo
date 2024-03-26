@@ -23,7 +23,7 @@ MAINTAINER deckersu@protonmail.com
 SHELL ["/bin/bash", "-c"]
 
 # Latest release komodo 0.8.2-beta1
-ARG KOMODO_COMMITTISH=v0.8.2-beta1
+ARG KOMODO_COMMITTISH=v0.8.2-beta1-sign
 ARG IS_RELEASE=false
 # DeckerSU <deckersu@protonmail.com> https://keys.openpgp.org/vks/v1/by-fingerprint/FD9A772C7300F4C894D1A819FE50480862E6451C
 ARG KOMODOD_MAINTAINER_KEYS="FD9A772C7300F4C894D1A819FE50480862E6451C"
@@ -38,7 +38,7 @@ RUN set -euxo pipefail \
       git g++-multilib gnupg2 libc6-dev libgomp1 libtool m4 ncurses-dev \
       pkg-config python3 zlib1g-dev \
     && git clone https://github.com/DeckerSU/KomodoOcean.git \
-    && cd /komodo && git checkout "${KOMODO_COMMITTISH}" \
+    && cd /KomodoOcean && git checkout "${KOMODO_COMMITTISH}" \
     && if [ "$IS_RELEASE" = "true" ]; then \
       read -a keys <<< "$KOMODOD_MAINTAINER_KEYS" \
       && for key in "${keys[@]}"; do \
@@ -57,7 +57,7 @@ RUN set -euxo pipefail \
       && ( gpgconf --kill dirmngr || true ) \
       && ( gpgconf --kill gpg-agent || true ); \
     fi \
-    && export MAKEFLAGS="-j $(($(nproc)+1))" && ./zcutil/build.sh $MAKEFLAGS
+    && export MAKEFLAGS="-j $(($(nproc)+1))" && ./zcutil/build-no-qt.sh $MAKEFLAGS
 
 
 ## Build Rosetta Server Components
@@ -97,7 +97,7 @@ SHELL ["/bin/bash", "-c"]
 WORKDIR /app
 
 # Copy komodod and fetch-params.sh
-COPY --from=komodod-builder /komodo/src/komodod /komodo/zcutil/fetch-params.sh /app/
+COPY --from=komodod-builder /KomodoOcean/src/komodod /KomodoOcean/zcutil/fetch-params.sh /app/
 
 # Copy rosetta-komodo and assets
 COPY --from=rosetta-builder /go/src/rosetta-komodo /go/src/assets/* /app/
