@@ -46,7 +46,7 @@ var (
 	// variable instead of a constant because
 	// we typically need the pointer of this
 	// value.
-	MiddlewareVersion = "0.1.1"
+	MiddlewareVersion = "0.1.2"
 )
 
 // Client is used by the servicers to get Peer information
