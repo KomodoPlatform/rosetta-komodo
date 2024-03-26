@@ -5,12 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Package",
+            "name": "Launch API",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/main.go",
             "envFile": "${workspaceFolder}/config.env"
-        }
+        },
+        {
+            "name": "Launch Keys Extractor",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/contrib/get-keys.go",
+        },
     ]
 }
