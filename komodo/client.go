@@ -27,7 +27,6 @@ import (
 	"time"
 
 	"github.com/DeckerSU/rosetta-komodo/komodoutil"
-	"github.com/coinbase/rosetta-sdk-go/storage"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/coinbase/rosetta-sdk-go/utils"
 )
@@ -255,7 +254,7 @@ func addCoins(txIndex int, blockTxHashes []string, hash string, inputs []*Input,
 func (b *Client) ParseBlock(
 	ctx context.Context,
 	block *Block,
-	coins map[string]*storage.AccountCoin,
+	coins map[string]*types.AccountCoin,
 ) (*types.Block, error) {
 	rblock, err := b.parseBlockData(block)
 	if err != nil {
@@ -497,7 +496,7 @@ func (b *Client) GetHashFromIndex(
 func (b *Client) parseTransactions(
 	ctx context.Context,
 	block *Block,
-	coins map[string]*storage.AccountCoin,
+	coins map[string]*types.AccountCoin,
 ) ([]*types.Transaction, error) {
 
 	if block == nil {
@@ -591,7 +590,7 @@ func (b *Client) parseTransactions(
 	return txs, nil
 }
 
-func addCoinsFromSameBlock(operations []*types.Operation, coins map[string]*storage.AccountCoin) map[string]*storage.AccountCoin {
+func addCoinsFromSameBlock(operations []*types.Operation, coins map[string]*types.AccountCoin) map[string]*types.AccountCoin {
 	// In some cases, a transaction will spend an output
 	// from the same block.
 	for _, op := range operations {
@@ -603,7 +602,7 @@ func addCoinsFromSameBlock(operations []*types.Operation, coins map[string]*stor
 			continue
 		}
 
-		coins[op.CoinChange.CoinIdentifier.Identifier] = &storage.AccountCoin{
+		coins[op.CoinChange.CoinIdentifier.Identifier] = &types.AccountCoin{
 			Coin: &types.Coin{
 				CoinIdentifier: op.CoinChange.CoinIdentifier,
 				Amount:         op.Amount,
@@ -622,7 +621,7 @@ func (b *Client) parseTxOperations(
 	outputs []*Output,
 	hash string,
 	txIndex int,
-	coins map[string]*storage.AccountCoin,
+	coins map[string]*types.AccountCoin,
 	isImmatureCertificate bool,
 ) ([]*types.Operation, error) {
 	txOps := []*types.Operation{}
@@ -638,7 +637,7 @@ func (b *Client) parseTxOperations(
 			break
 		}
 
-		// Fetch the *storage.AccountCoin the input is associated with
+		// Fetch the *types.AccountCoin the input is associated with
 		accountCoin, ok := coins[CoinIdentifier(input.TxHash, input.Vout)]
 		if !ok {
 			return nil, fmt.Errorf(
@@ -736,11 +735,11 @@ func (b *Client) parseOutputTransactionOperation(
 	}
 
 	// if it's a coinbase output and we are not in regtest populate SubAccount field
-	if txIndex == 0 && b.genesisBlockIdentifier.Hash != RegtestGenesisBlockIdentifier.Hash {
-		account.SubAccount = &types.SubAccountIdentifier{
-			Address: "coinbase",
-		}
-	}
+	// if txIndex == 0 && b.genesisBlockIdentifier.Hash != RegtestGenesisBlockIdentifier.Hash {
+	// 	account.SubAccount = &types.SubAccountIdentifier{
+	// 		Address: "coinbase",
+	// 	}
+	// }
 
 	// If this is an OP_RETURN locking script,
 	// we don't create a coin because it is provably unspendable.
@@ -754,7 +753,7 @@ func (b *Client) parseOutputTransactionOperation(
 			NetworkIndex: &networkIndex,
 		},
 		Type:    OutputOpType,
-		Status:  SuccessStatus,
+		Status:  types.String(SuccessStatus),
 		Account: account,
 		Amount: &types.Amount{
 			Value:    strconv.FormatInt(int64(amount), 10),
@@ -793,7 +792,7 @@ func (b *Client) parseInputTransactionOperation(
 	input *Input,
 	index int64,
 	networkIndex int64,
-	accountCoin *storage.AccountCoin,
+	accountCoin *types.AccountCoin,
 ) (*types.Operation, error) {
 	metadata, err := input.Metadata()
 	if err != nil {
@@ -811,7 +810,7 @@ func (b *Client) parseInputTransactionOperation(
 			NetworkIndex: &networkIndex,
 		},
 		Type:    InputOpType,
-		Status:  SuccessStatus,
+		Status:  types.String(SuccessStatus),
 		Account: accountCoin.Account,
 		Amount: &types.Amount{
 			Value:    newValue,
@@ -873,7 +872,7 @@ func (b *Client) coinbaseTxOperation(
 			NetworkIndex: &networkIndex,
 		},
 		Type:     CoinbaseOpType,
-		Status:   SuccessStatus,
+		Status:   types.String(SuccessStatus),
 		Metadata: metadata,
 	}, nil
 }

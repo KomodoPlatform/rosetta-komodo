@@ -18,7 +18,7 @@ GZIP_CMD=$(shell command -v pigz || echo gzip)
 NOFILE=100000
 # DeckerSU <deckersu@protonmail.com> https://keys.openpgp.org/vks/v1/by-fingerprint/FD9A772C7300F4C894D1A819FE50480862E6451C
 KOMODOD_MAINTAINER_KEYS?=FD9A772C7300F4C894D1A819FE50480862E6451C
-KOMODO_COMMITTISH?=v0.8.2-beta1
+KOMODO_COMMITTISH?=v0.8.2-beta1-sign
 DOCKER_IMAGE_NAME?=deckersu/rosetta-komodo
 
 deps:

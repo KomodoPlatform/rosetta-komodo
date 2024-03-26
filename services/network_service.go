@@ -98,6 +98,8 @@ func (s *NetworkAPIService) NetworkOptions(
 			OperationStatuses:       komodo.OperationStatuses,
 			OperationTypes:          komodo.OperationTypes,
 			Errors:                  Errors,
-			HistoricalBalanceLookup: HistoricalBalanceLookup},
+			HistoricalBalanceLookup: HistoricalBalanceLookup,
+			MempoolCoins:            MempoolCoins,
+		},
 	}, nil
 }

@@ -157,7 +157,7 @@ func TestIndexer_Pruning(t *testing.T) {
 				"ParseBlock",
 				mock.Anything,
 				block,
-				map[string]*storage.AccountCoin{},
+				map[string]*{},
 			).Return(
 				blockReturn,
 				nil,
@@ -167,7 +167,7 @@ func TestIndexer_Pruning(t *testing.T) {
 				"ParseBlock",
 				mock.Anything,
 				block,
-				map[string]*storage.AccountCoin{},
+				map[string]*types.AccountCoin{},
 			).Return(
 				blockReturn,
 				nil,
@@ -356,9 +356,9 @@ func TestIndexer_Transactions(t *testing.T) {
 			Transactions:          transactions,
 		}
 
-		coinMap := map[string]*storage.AccountCoin{}
+		coinMap := map[string]*types.AccountCoin{}
 		for _, coinIdentifier := range requiredCoins {
-			coinMap[coinIdentifier] = &storage.AccountCoin{
+			coinMap[coinIdentifier] = &types.AccountCoin{
 				Account: coinBank[coinIdentifier].Account,
 				Coin:    coinBank[coinIdentifier].Coin,
 			}
@@ -602,9 +602,9 @@ func TestIndexer_Reorg(t *testing.T) {
 			Transactions:          transactions,
 		}
 
-		coinMap := map[string]*storage.AccountCoin{}
+		coinMap := map[string]*types.AccountCoin{}
 		for _, coinIdentifier := range requiredCoins {
-			coinMap[coinIdentifier] = &storage.AccountCoin{
+			coinMap[coinIdentifier] = &types.AccountCoin{
 				Account: coinBank[coinIdentifier].Account,
 				Coin:    coinBank[coinIdentifier].Coin,
 			}
@@ -774,7 +774,7 @@ func TestIndexer_HeaderReorg(t *testing.T) {
 			Transactions:          transactions,
 		}
 
-		coinMap := map[string]*storage.AccountCoin{}
+		coinMap := map[string]*types.AccountCoin{}
 		if i == 400 {
 			mockClient.On(
 				"ParseBlock",
