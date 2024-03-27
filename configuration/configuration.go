@@ -164,6 +164,17 @@ func LoadConfiguration(baseDirectory string) (*Configuration, error) {
 	}
 
 	networkValue := os.Getenv(NetworkEnv)
+
+	// In Komodo, we don't support any networks other than Mainnet,
+	// so we should disable the possibility of launching with testnet
+	// and regtest. For anyone who wants to experiment with the Komodo
+	// Platform, the recommended way to launch a new network is to
+	// create a separate asset chain.
+
+	if networkValue == Testnet || networkValue == Regtest {
+		return nil, errors.New("KOMODO only supports the Mainnet network")
+	}
+
 	switch networkValue {
 	case Mainnet:
 		config.Network = &types.NetworkIdentifier{
