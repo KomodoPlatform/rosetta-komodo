@@ -1,0 +1,16 @@
+transfer(1){
+  transfer{
+    transfer.network = {"network":"main", "blockchain":"Komodo"};
+    currency = {"symbol":"KMD", "decimals":8};
+    account_identifier = { "address": "RNibqervY2KBuiubgy53p5rMrSW4zzwU3Y" };
+    print_message({{account_identifier}});
+    sender = find_balance({
+      "account_identifier": {{account_identifier}},
+      "minimum_balance": {
+        "value": "10000",
+        "currency": {{currency}}
+      }
+    });
+    print_message({{sender}});
+  }
+}

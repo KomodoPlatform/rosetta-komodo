@@ -12,7 +12,26 @@
   "max_sync_concurrency": 0,
   "tip_delay": 2700,
   "log_configuration": false,
-  "construction": null,
+  "construction": {
+    "prefunded_accounts": [
+      {
+        "privkey": "5419bb470406a52f8e2a2e9219f384ba739c40a42ca4cb4d623742f695932bb2",
+        "curve_type": "secp256k1",
+        "account_identifier": {
+          "address": "RNibqervY2KBuiubgy53p5rMrSW4zzwU3Y"
+        },
+        "currency": {
+          "symbol": "KMD",
+          "decimals": 8
+        }
+      }
+    ],
+    "offline_url": "http://127.0.0.1:8100",
+    "constructor_dsl_file": "komodo.ros",
+    "end_conditions": {
+      "transfer": 1
+    }
+  },
   "data": {
     "active_reconciliation_concurrency": 0,
     "inactive_reconciliation_concurrency": 0,
