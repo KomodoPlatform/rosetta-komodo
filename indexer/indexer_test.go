@@ -27,7 +27,6 @@ import (
 	"github.com/DeckerSU/rosetta-komodo/komodo"
 	mocks "github.com/DeckerSU/rosetta-komodo/mocks/indexer"
 
-	"github.com/coinbase/rosetta-sdk-go/storage"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/coinbase/rosetta-sdk-go/utils"
 	"github.com/stretchr/testify/assert"
@@ -48,7 +47,6 @@ var (
 
 func TestIndexer_Pruning(t *testing.T) {
 	// Create Indexer
-	ctx := context.Background()
 	ctx, cancel := context.WithCancel(context.Background())
 
 	newDir, err := utils.CreateTempDir()
@@ -157,7 +155,7 @@ func TestIndexer_Pruning(t *testing.T) {
 				"ParseBlock",
 				mock.Anything,
 				block,
-				map[string]*{},
+				map[string]*types.AccountCoin{},
 			).Return(
 				blockReturn,
 				nil,
@@ -215,7 +213,6 @@ func TestIndexer_Pruning(t *testing.T) {
 
 func TestIndexer_Transactions(t *testing.T) {
 	// Create Indexer
-	ctx := context.Background()
 	ctx, cancel := context.WithCancel(context.Background())
 
 	newDir, err := utils.CreateTempDir()
@@ -286,7 +283,7 @@ func TestIndexer_Transactions(t *testing.T) {
 							Index:        0,
 							NetworkIndex: &index0,
 						},
-						Status: komodo.SuccessStatus,
+						Status: types.String(komodo.SuccessStatus),
 						Type:   komodo.OutputOpType,
 						Account: &types.AccountIdentifier{
 							Address: rawHash,
@@ -433,7 +430,6 @@ func TestIndexer_Transactions(t *testing.T) {
 
 func TestIndexer_Reorg(t *testing.T) {
 	// Create Indexer
-	ctx := context.Background()
 	ctx, cancel := context.WithCancel(context.Background())
 
 	newDir, err := utils.CreateTempDir()
@@ -505,7 +501,7 @@ func TestIndexer_Reorg(t *testing.T) {
 							Index:        0,
 							NetworkIndex: &index0,
 						},
-						Status: komodo.SuccessStatus,
+						Status: types.String(komodo.SuccessStatus),
 						Type:   komodo.OutputOpType,
 						Account: &types.AccountIdentifier{
 							Address: rawHash,
@@ -675,7 +671,7 @@ func TestIndexer_Reorg(t *testing.T) {
 
 func TestIndexer_HeaderReorg(t *testing.T) {
 	// Create Indexer
-	ctx := context.Background()
+
 	ctx, cancel := context.WithCancel(context.Background())
 
 	newDir, err := utils.CreateTempDir()

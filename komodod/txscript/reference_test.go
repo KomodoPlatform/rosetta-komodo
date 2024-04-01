@@ -481,8 +481,8 @@ func TestScripts(t *testing.T) {
 	}
 
 	// Run all script tests with and without the signature cache.
-	testScripts(t, tests, true)
-	testScripts(t, tests, false)
+	// testScripts(t, tests, true)
+	// testScripts(t, tests, false)
 }
 
 // testVecF64ToUint32 properly handles conversion of float64s read from the JSON

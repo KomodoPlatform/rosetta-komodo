@@ -24,7 +24,7 @@ func ExamplePayToAddrScript_PayToPublicKey() {
 	// which is useful to ensure the accuracy of the address and determine
 	// the address type.  It is also required for the upcoming call to
 	// PayToAddrScript.
-	addressStr := "znYyGhbvKwRdqVBZPN3KUkQLPE3QYTPxN73"
+	addressStr := "RHAYnhAztfvnx5f3yu56wce3poxTnwPJBQ"
 	address, err := komodoutil.DecodeAddress(addressStr, &chaincfg.MainNetParams)
 
 	if err != nil {
@@ -60,7 +60,7 @@ func ExamplePayToAddrScript_PayToHash() {
 	// which is useful to ensure the accuracy of the address and determine
 	// the address type.  It is also required for the upcoming call to
 	// PayToAddrScript.
-	addressStr := "zsfULrmbX7xbhqhAFRffVqCw9RyGv2hqNNG"
+	addressStr := "bDirmARebNTB7nvxLZQwqvWFanv9rfgPfY"
 	address, err := komodoutil.DecodeAddress(addressStr, &chaincfg.MainNetParams)
 
 	if err != nil {
@@ -96,7 +96,7 @@ func ExamplePayToAddrReplayOutScript_PayToPublicKey() {
 	// which is useful to ensure the accuracy of the address and determine
 	// the address type.  It is also required for the upcoming call to
 	// PayToAddrScript.
-	addressStr := "znbfGJmzkL8JxBuskpzAcbv8frMjvWK8zL5"
+	addressStr := "RKrYPsFRHNbueoyRSqvEo8SLT8HqkfrQx7"
 	blockHash, errDecode := hex.DecodeString("47f1273bab0e66e76a5c2dd8fed808a23b2c08a22fcc46c00c78000400000000")
 	blockHeight := int64(811742)
 	address, err := komodoutil.DecodeAddress(addressStr, &chaincfg.MainNetParams)
@@ -139,7 +139,7 @@ func ExamplePayToAddrReplayOutScript_PayToHash() {
 	// which is useful to ensure the accuracy of the address and determine
 	// the address type.  It is also required for the upcoming call to
 	// PayToAddrScript.
-	addressStr := "zsyF68hcYYNLPj5i4PfQJ1kUY6nsFnZkc82"
+	addressStr := "bXVc36Sg1nBs1BUmJZ9k2U3eFcWVenft9h"
 	blockHash, errDecode := hex.DecodeString("00000001cf4e27ce1dd8028408ed0a48edd445ba388170c9468ba0d42fff3052")
 	blockHeight := int64(142091)
 	address, err := komodoutil.DecodeAddress(addressStr, &chaincfg.MainNetParams)
@@ -197,7 +197,7 @@ func ExampleExtractPkScriptAddrs() {
 
 	// Output:
 	// Script Class: pubkeyhash
-	// Addresses: [znYyGhbvKwRdqVBZPN3KUkQLPE3QYTPxN73]
+	// Addresses: [RHAYnhAztfvnx5f3yu56wce3poxTnwPJBQ]
 	// Required Signatures: 1
 }
 
@@ -225,7 +225,7 @@ func ExampleExtractPkScriptReplayOutAddrs() {
 
 	// Output:
 	// Script Class: pubkeyhashreplayout
-	// Addresses: [znbfGJmzkL8JxBuskpzAcbv8frMjvWK8zL5]
+	// Addresses: [RKrYPsFRHNbueoyRSqvEo8SLT8HqkfrQx7]
 	// Required Signatures: 1
 }
 
@@ -253,7 +253,7 @@ func ExampleExtractP2sAddrs() {
 
 	// Output:
 	// Script Class: scripthash
-	// Addresses: [zsfULrmbX7xbhqhAFRffVqCw9RyGv2hqNNG]
+	// Addresses: [bDirmARebNTB7nvxLZQwqvWFanv9rfgPfY]
 	// Required Signatures: 1
 }
 
@@ -281,7 +281,7 @@ func ExampleExtractP2sReplayOutAddrs() {
 
 	// Output:
 	// Script Class: scripthashreplayout
-	// Addresses: [zsyF68hcYYNLPj5i4PfQJ1kUY6nsFnZkc82]
+	// Addresses: [bXVc36Sg1nBs1BUmJZ9k2U3eFcWVenft9h]
 	// Required Signatures: 1
 }
 
