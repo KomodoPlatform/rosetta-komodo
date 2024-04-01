@@ -9,8 +9,6 @@ import (
 
 	mock "github.com/stretchr/testify/mock"
 
-	storage "github.com/coinbase/rosetta-sdk-go/storage"
-
 	types "github.com/coinbase/rosetta-sdk-go/types"
 )
 
