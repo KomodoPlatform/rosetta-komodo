@@ -201,8 +201,6 @@ type Block struct {
 	Difficulty        float64 `json:"difficulty"`
 
 	Txs []*Transaction `json:"tx"`
-	// Certs        []*Certificate `json:"cert"`
-	// MaturedCerts []*Certificate `json:"matureCertificate"`
 }
 
 // Metadata returns the metadata for a block.
