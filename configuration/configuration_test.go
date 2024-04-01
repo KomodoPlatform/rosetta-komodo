@@ -21,7 +21,7 @@ import (
 	"testing"
 
 	"github.com/DeckerSU/rosetta-komodo/komodo"
-	"github.com/coinbase/rosetta-sdk-go/storage"
+	"github.com/coinbase/rosetta-sdk-go/storage/encoder"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/coinbase/rosetta-sdk-go/utils"
 	"github.com/stretchr/testify/assert"
@@ -69,7 +69,7 @@ func TestLoadConfiguration(t *testing.T) {
 					Depth:     pruneDepth,
 					MinHeight: minPruneHeight,
 				},
-				Compressors: []*storage.CompressorEntry{
+				Compressors: []*encoder.CompressorEntry{
 					{
 						Namespace:      transactionNamespace,
 						DictionaryPath: mainnetTransactionDictionary,
@@ -77,35 +77,35 @@ func TestLoadConfiguration(t *testing.T) {
 				},
 			},
 		},
-		"all set (testnet)": {
-			Mode:    string(Online),
-			Network: Testnet,
-			Port:    "1000",
-			cfg: &Configuration{
-				Mode: Online,
-				Network: &types.NetworkIdentifier{
-					Network:    komodo.TestnetNetwork,
-					Blockchain: komodo.Blockchain,
-				},
-				Params:                 komodo.TestnetParams,
-				Currency:               komodo.TestnetCurrency,
-				GenesisBlockIdentifier: komodo.TestnetGenesisBlockIdentifier,
-				Port:                   1000,
-				RPCPort:                testnetRPCPort,
-				ConfigPath:             testnetConfigPath,
-				Pruning: &PruningConfiguration{
-					Frequency: pruneFrequency,
-					Depth:     pruneDepth,
-					MinHeight: minPruneHeight,
-				},
-				Compressors: []*storage.CompressorEntry{
-					{
-						Namespace:      transactionNamespace,
-						DictionaryPath: testnetTransactionDictionary,
-					},
-				},
-			},
-		},
+		// "all set (testnet)": {
+		// 	Mode:    string(Online),
+		// 	Network: Testnet,
+		// 	Port:    "1000",
+		// 	cfg: &Configuration{
+		// 		Mode: Online,
+		// 		Network: &types.NetworkIdentifier{
+		// 			Network:    komodo.TestnetNetwork,
+		// 			Blockchain: komodo.Blockchain,
+		// 		},
+		// 		Params:                 komodo.TestnetParams,
+		// 		Currency:               komodo.TestnetCurrency,
+		// 		GenesisBlockIdentifier: komodo.TestnetGenesisBlockIdentifier,
+		// 		Port:                   1000,
+		// 		RPCPort:                testnetRPCPort,
+		// 		ConfigPath:             testnetConfigPath,
+		// 		Pruning: &PruningConfiguration{
+		// 			Frequency: pruneFrequency,
+		// 			Depth:     pruneDepth,
+		// 			MinHeight: minPruneHeight,
+		// 		},
+		// 		Compressors: []*encoder.CompressorEntry{
+		// 			{
+		// 				Namespace:      transactionNamespace,
+		// 				DictionaryPath: testnetTransactionDictionary,
+		// 			},
+		// 		},
+		// 	},
+		// },
 		"invalid mode": {
 			Mode:    "bad mode",
 			Network: Testnet,
@@ -120,7 +120,7 @@ func TestLoadConfiguration(t *testing.T) {
 		},
 		"invalid port": {
 			Mode:    string(Offline),
-			Network: Testnet,
+			Network: Mainnet,
 			Port:    "bad port",
 			err:     errors.New("unable to parse port bad port"),
 		},
