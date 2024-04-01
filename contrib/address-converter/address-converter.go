@@ -1,4 +1,4 @@
-package main
+package address_converter
 
 // simple address converter to KMD (Komodo) address
 // go get github.com/btcsuite/btcutil/base58

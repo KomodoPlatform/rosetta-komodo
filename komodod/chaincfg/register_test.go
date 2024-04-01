@@ -27,7 +27,7 @@ func TestRegister(t *testing.T) {
 		err    error
 	}
 	type magicTest struct {
-		magic uint16
+		magic byte
 		valid bool
 	}
 	type prefixTest struct {
