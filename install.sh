@@ -196,7 +196,7 @@ End of functions from https://github.com/client9/shlib
 ------------------------------------------------------------------------
 EOF
 
-BINARY=rosetta-komodo
+BINARY=rosetta-kmd
 FORMAT=tar.gz
 OWNER=DeckerSU
 REPO="rosetta-komodo"
