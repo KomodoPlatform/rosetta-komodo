@@ -226,7 +226,8 @@ and run one of the following commands:
 ## License
 This project is available open source under the terms of the [Apache 2.0 License](https://opensource.org/licenses/Apache-2.0).
 
-© 2020 Coinbase
-© 2020   Blockchain Foundation
-© 2023 Horizen Foundation
-© 2024 DeckerSU
+© 2020 Coinbase  
+© 2020 Zen Blockchain Foundation  
+© 2023 Horizen Foundation  
+© 2023 DCRDEX Developers  
+© 2024 Komodo Platform  
