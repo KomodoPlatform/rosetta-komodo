@@ -24,7 +24,7 @@ import (
 const (
 	// NodeVersion is the version of
 	// komodod core we are using.
-	NodeVersion = "0.8.2"
+	NodeVersion = "0.9.0"
 
 	// HistoricalBalanceLookup indicates
 	// that historical balance lookup is supported.
@@ -46,7 +46,7 @@ var (
 	// variable instead of a constant because
 	// we typically need the pointer of this
 	// value.
-	MiddlewareVersion = "0.1.3"
+	MiddlewareVersion = "0.1.4"
 )
 
 // Client is used by the servicers to get Peer information

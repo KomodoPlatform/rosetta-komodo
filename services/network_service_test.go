@@ -26,11 +26,11 @@ import (
 )
 
 var (
-	middlewareVersion     = "0.1.3"
+	middlewareVersion     = "0.1.4"
 	defaultNetworkOptions = &types.NetworkOptionsResponse{
 		Version: &types.Version{
 			RosettaVersion:    types.RosettaAPIVersion,
-			NodeVersion:       "0.8.2",
+			NodeVersion:       "0.9.0",
 			MiddlewareVersion: &middlewareVersion,
 		},
 		Allow: &types.Allow{
